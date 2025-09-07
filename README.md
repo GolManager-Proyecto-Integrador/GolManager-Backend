@@ -1,2 +1,0 @@
-# GolManager-Backend
-Backend
