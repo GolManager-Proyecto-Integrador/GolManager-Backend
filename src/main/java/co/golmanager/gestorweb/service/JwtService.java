@@ -22,8 +22,6 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    //private static final String SECRET_KEY = "Mjk3ajhDKlNnU0pLdjNMbE9QZ1NTdnVjR1g5T3h3U0xUR0JQaFZJYkdq";//QUITAR ANTES DE PRODUCCION
-
     public String generateToken(UserDetails userDetails) {
         return generateToken(Map.of(), userDetails);
     }
