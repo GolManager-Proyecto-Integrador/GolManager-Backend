@@ -23,7 +23,10 @@ public class JwtService {
     private String SECRET_KEY;
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(Map.of(), userDetails);
+        Map<String, Object> claims = Map.of(
+                "role", userDetails.getAuthorities().iterator().next().getAuthority() // Ej: "ROLE_ADMIN"
+        );
+        return generateToken(claims, userDetails);
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
@@ -69,4 +72,8 @@ public class JwtService {
 
     private Date getExpiration(String token) {
         return getClaim(token, Claims::getExpiration);}
+
+    public String getUserRole(String token) {
+        return getClaim(token, claims -> claims.get("role", String.class));
+    }
 }
