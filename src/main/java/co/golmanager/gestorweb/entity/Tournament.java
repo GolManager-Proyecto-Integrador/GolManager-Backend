@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.lang.annotation.Target;
 import java.time.LocalDate;
 
 @Entity
@@ -46,4 +45,7 @@ public class Tournament {
 
     @OneToMany(mappedBy = "tournament", targetEntity = Match.class, fetch = FetchType.LAZY)
     private java.util.List<Match> matches;
+
+    @ManyToMany(targetEntity = Referee.class,fetch = FetchType.LAZY)
+    private java.util.List<Referee> referees;
 }
