@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 
@@ -26,8 +28,11 @@ public class Tournament {
     @Column(name = "end_date", columnDefinition = "DATE")
     private LocalDate endDate;
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "tournament_format")
+    @Column(name= "format",columnDefinition = "tournament_format")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private TournamentFormat format;
+    @Column(columnDefinition = "number_of_teams")
+    private int numberOfTeams;
     @Column(name = "home_away")
     private boolean homeAndAway;
     @Column(name = "yellow_cards_suspension")

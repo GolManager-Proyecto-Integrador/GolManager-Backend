@@ -1,4 +1,4 @@
-package co.golmanager.gestorweb.controller.models;
+package co.golmanager.gestorweb.controller.models.requests;
 
 
 import lombok.AllArgsConstructor;
@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationRequest {
+public class RegisterRequest {
+    private String name;
     private String email;
     private String password;
 }
