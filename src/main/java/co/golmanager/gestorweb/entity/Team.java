@@ -31,7 +31,7 @@ public class Team {
     @OneToOne(mappedBy = "team", targetEntity = TeamPosition.class, fetch = FetchType.LAZY)
     private TeamPosition teamPosition;
 
-    @OneToMany(mappedBy = "team", targetEntity = Player.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "team", targetEntity = Player.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Player> players;
 
     @OneToMany(mappedBy = "homeTeam", targetEntity = Match.class, fetch = FetchType.LAZY)

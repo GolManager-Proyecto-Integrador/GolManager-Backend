@@ -28,7 +28,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.ORDINAL)
     private Role role;
 
-    @OneToMany (mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany (mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tournament> tournaments;
 
     @Override

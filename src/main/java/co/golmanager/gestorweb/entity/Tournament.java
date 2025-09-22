@@ -42,13 +42,13 @@ public class Tournament {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "tournament", targetEntity = Team.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tournament", targetEntity = Team.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Team> teams;
 
-    @OneToMany(mappedBy = "tournament", targetEntity = TeamPosition.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tournament", targetEntity = TeamPosition.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<TeamPosition> teamPositions;
 
-    @OneToMany(mappedBy = "tournament", targetEntity = Match.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tournament", targetEntity = Match.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Match> matches;
 
     @ManyToMany(targetEntity = Referee.class,fetch = FetchType.LAZY)

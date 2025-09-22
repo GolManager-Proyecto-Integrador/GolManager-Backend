@@ -41,9 +41,9 @@ public class Player {
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
-    @OneToMany(mappedBy = "player", targetEntity = Goal.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "player", targetEntity = Goal.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Goal> goalsList;
 
-    @OneToMany(mappedBy = "player", targetEntity = Card.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "player", targetEntity = Card.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Card> cards;
 }
