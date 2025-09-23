@@ -7,6 +7,7 @@ import co.golmanager.gestorweb.controller.models.responses.TournamentDetailRespo
 import co.golmanager.gestorweb.controller.models.responses.TournamentSummaryResponse;
 import co.golmanager.gestorweb.entity.Referee;
 import co.golmanager.gestorweb.entity.Tournament;
+import co.golmanager.gestorweb.entity.User;
 import co.golmanager.gestorweb.enums.TournamentFormat;
 import co.golmanager.gestorweb.repository.RefereeRepository;
 import co.golmanager.gestorweb.repository.TournamentRepository;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,8 +33,9 @@ public class TournamentServiceImpl implements TournamentService {
     @Transactional
     @Override
     public List<TournamentSummaryResponse> getAllTournamentsById(String email) {
-        var user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        //Comprueba que el id del usuario exista
+        var user = getUserByEmail(email);
 
         List<Tournament> tournaments = tournamentRepository.findByUserId(user.getId());
 
@@ -50,8 +53,10 @@ public class TournamentServiceImpl implements TournamentService {
     @Transactional
     @Override
     public TournamentDetailResponse getTournamentById(String tournamentId, String email) {
-        var user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        //Comprueba que el id del usuario exista
+        var user = getUserByEmail(email);
+
         Long id;
         try {
             id = Long.parseLong(tournamentId);
@@ -62,9 +67,7 @@ public class TournamentServiceImpl implements TournamentService {
         Tournament t = tournamentRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found"));
 
-        if (!t.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("Unauthorized to view this tournament");
-        }
+        idAuthorizationValidation(t.getUser().getId(), user.getId());
 
         List<Long> refereeIds = t.getReferees().stream()
                 .map(Referee::getId)
@@ -87,10 +90,7 @@ public class TournamentServiceImpl implements TournamentService {
     @Transactional
     public CreateTournamentResponse createTournament(CreateTournamentRequest req, String email) {
 
-        //Validacion de fechas
-        if (req.getEndDate().isBefore(req.getStartDate())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "endDate must be after startDate");
-        }
+        dateValidation(req.getStartDate(), req.getEndDate());
 
         Tournament t = Tournament.builder()
                 .name(req.getName())
@@ -103,8 +103,7 @@ public class TournamentServiceImpl implements TournamentService {
                 .build();
 
         if (email != null) {
-            var user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+            var user = getUserByEmail(email);
             t.setUser(user);
         }
 
@@ -133,9 +132,8 @@ public class TournamentServiceImpl implements TournamentService {
 
     public TournamentDetailResponse updateTournament
             (Long tournamentId, CreateTournamentRequest request, String email) {
-        // Implementation for updating a tournament would go here
-        var user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        var user = getUserByEmail(email);
         Long id;
         try {
             id = Long.parseLong(String.valueOf(tournamentId));
@@ -145,22 +143,12 @@ public class TournamentServiceImpl implements TournamentService {
         Tournament t = tournamentRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found"));
 
-        if (!t.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("Unauthorized to update this tournament");
-        }
+        idAuthorizationValidation(t.getUser().getId(), user.getId());
 
         //Si el formato cambia, validar que este en la lista de formatos permitidos
-        if (request.getFormat() != null ) {
-            List<String> allowedFormats = List.of("LEAGUE", "DIRECT_ELIMINATION", "PLAY_OFF");
-            if (!allowedFormats.contains(request.getFormat().name())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid format. Allowed formats are: " + allowedFormats);
-            }
-        }
+        formatValidation(request.getFormat());
 
-        //Validacion de fechas
-        if (request.getEndDate().isBefore(request.getStartDate())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "endDate must be after startDate");
-        }
+        dateValidation(request.getStartDate(), request.getEndDate());
 
         t.setName(request.getName());
         t.setStartDate(request.getStartDate());
@@ -188,20 +176,19 @@ public class TournamentServiceImpl implements TournamentService {
     public TournamentDeleteResponse deleteTournament(Long tournamentId, String email) {
 
         // Implementation for deleting a tournament would go here
-        var user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        var user = getUserByEmail(email);
         Long id;
         try {
             id = Long.parseLong(String.valueOf(tournamentId));
         } catch (NumberFormatException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid tournament ID format");
         }
+
         Tournament t = tournamentRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found"));
 
-        if (!t.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("Unauthorized to delete this tournament");
-        }
+        idAuthorizationValidation(t.getUser().getId(),user.getId());
 
         Long logUser = t.getId();
         String logName = t.getName();
@@ -214,5 +201,31 @@ public class TournamentServiceImpl implements TournamentService {
                 .name(logName)
                 .deletionDate(deleteTime)
                 .build();
+    }
+
+    private void dateValidation (LocalDate startDate, LocalDate endDate) {
+        if (endDate.isBefore(startDate)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "endDate must be after startDate");
+        }
+    }
+
+    private User getUserByEmail(String email){
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    }
+
+    private void formatValidation (TournamentFormat format) {
+        if (format != null ) {
+            List<String> allowedFormats = List.of("LEAGUE", "DIRECT_ELIMINATION", "PLAY_OFF");
+            if (!allowedFormats.contains(format.name())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid format. Allowed formats are: " + allowedFormats);
+            }
+        }
+    }
+
+    private void idAuthorizationValidation (Long idOwnerTournament, Long idRequester) {
+        if (!idOwnerTournament.equals(idRequester)) {
+            throw new RuntimeException("Unauthorized to realize this action");
+        }
     }
 }
