@@ -26,7 +26,7 @@ import java.util.List;
 class TournamentController {
 
     @Autowired
-    private TournamentService tournamentService;
+    private final TournamentService tournamentService;
 
     @Operation(summary = "Obtain all tournaments for the authenticated user", description = "Retrieves a list of all tournaments associated with the authenticated user.")
     @GetMapping

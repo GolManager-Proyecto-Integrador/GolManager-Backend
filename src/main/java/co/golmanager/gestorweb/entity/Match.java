@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "tbl_match")
@@ -21,8 +23,8 @@ public class Match {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String stadium;
-    @Column(name = "match_date", columnDefinition = "DATE")
-    private LocalDate matchDate;
+    @Column(name = "match_date", columnDefinition = "timestamptz")
+    private OffsetDateTime matchDate;
     @Column(name = "home_goals")
     private int homeGoals;
     @Column(name = "away_goals")

@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -64,9 +65,7 @@ public class TournamentServiceImpl implements TournamentService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid tournament ID format");
         }
 
-        Tournament t = tournamentRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found"));
-
+        Tournament t = idTournamentValidation(id);
         idAuthorizationValidation(t.getUser().getId(), user.getId());
 
         List<Long> refereeIds = t.getReferees().stream()
@@ -91,7 +90,7 @@ public class TournamentServiceImpl implements TournamentService {
     public CreateTournamentResponse createTournament(CreateTournamentRequest req, String email) {
 
         dateValidation(req.getStartDate(), req.getEndDate());
-
+        OffsetDateTime dateCreated =  OffsetDateTime.now();
         Tournament t = Tournament.builder()
                 .name(req.getName())
                 .startDate(req.getStartDate())
@@ -100,6 +99,7 @@ public class TournamentServiceImpl implements TournamentService {
                 .homeAndAway(req.isHomeAndAway())
                 .numberOfTeams(req.getNumberOfTeams())
                 .yellowCardsSuspension(req.getYellowCardsSuspension())
+                .dateCreated(dateCreated)
                 .build();
 
         if (email != null) {
@@ -134,15 +134,8 @@ public class TournamentServiceImpl implements TournamentService {
             (Long tournamentId, CreateTournamentRequest request, String email) {
 
         var user = getUserByEmail(email);
-        Long id;
-        try {
-            id = Long.parseLong(String.valueOf(tournamentId));
-        } catch (NumberFormatException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid tournament ID format");
-        }
-        Tournament t = tournamentRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found"));
-
+        Long id = idTournamentFormatValidation(tournamentId);
+        Tournament t = idTournamentValidation(id);
         idAuthorizationValidation(t.getUser().getId(), user.getId());
 
         //Si el formato cambia, validar que este en la lista de formatos permitidos
@@ -178,15 +171,8 @@ public class TournamentServiceImpl implements TournamentService {
         // Implementation for deleting a tournament would go here
 
         var user = getUserByEmail(email);
-        Long id;
-        try {
-            id = Long.parseLong(String.valueOf(tournamentId));
-        } catch (NumberFormatException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid tournament ID format");
-        }
-
-        Tournament t = tournamentRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found"));
+        Long id = idTournamentFormatValidation(tournamentId);
+        Tournament t = idTournamentValidation(id);
 
         idAuthorizationValidation(t.getUser().getId(),user.getId());
 
@@ -227,5 +213,20 @@ public class TournamentServiceImpl implements TournamentService {
         if (!idOwnerTournament.equals(idRequester)) {
             throw new RuntimeException("Unauthorized to realize this action");
         }
+    }
+
+    private Tournament idTournamentValidation (Long id) {
+        return tournamentRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found"));
+    }
+
+    private Long idTournamentFormatValidation(Long tournamentId) {
+        Long id;
+        try {
+             id = Long.parseLong(String.valueOf(tournamentId));
+        } catch (NumberFormatException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid tournament ID format");
+        }
+        return id;
     }
 }

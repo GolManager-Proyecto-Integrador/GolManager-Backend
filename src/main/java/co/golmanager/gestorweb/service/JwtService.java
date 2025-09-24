@@ -24,7 +24,7 @@ public class JwtService {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = Map.of(
-                "role", userDetails.getAuthorities().iterator().next().getAuthority() // Ej: "ROLE_ADMIN"
+                "role", userDetails.getAuthorities().iterator().next().getAuthority()
         );
         return generateToken(claims, userDetails);
     }
@@ -34,7 +34,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // Duracion del token: 24 minutos
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 120)) // Duracion del token: 2 horas
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

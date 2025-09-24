@@ -4,6 +4,9 @@ import co.golmanager.gestorweb.enums.TeamCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+
 @Entity
 @Table(name = "tbl_team")
 @Data
@@ -23,6 +26,8 @@ public class Team {
     private String mainStadium;
     @Column(name = "secondary_stadium")
     private String secondaryStadium;
+    @Column(name = "date_created", columnDefinition = "timestamptz")
+    private OffsetDateTime dateCreated;
 
     @ManyToOne(targetEntity = Tournament.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "tournament_id", nullable = false)
