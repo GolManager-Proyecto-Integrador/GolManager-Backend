@@ -3,6 +3,8 @@ package co.golmanager.gestorweb.entity;
 import co.golmanager.gestorweb.enums.TeamCategory;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -20,7 +22,8 @@ public class Team {
     private String name;
     private String coach;
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "team_category")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column( columnDefinition = "team_category")
     private TeamCategory category;
     @Column(name = "main_stadium")
     private String mainStadium;
@@ -31,7 +34,7 @@ public class Team {
 
     @ManyToOne(targetEntity = Tournament.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "tournament_id", nullable = false)
-    private Tournament tournament;
+    private Tournament tournamentId;
 
     @OneToOne(mappedBy = "team", targetEntity = TeamPosition.class, fetch = FetchType.LAZY)
     private TeamPosition teamPosition;

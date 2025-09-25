@@ -1,17 +1,16 @@
 package co.golmanager.gestorweb.controller;
 
-import co.golmanager.gestorweb.entity.Team;
-import co.golmanager.gestorweb.service.TeamService;
+import co.golmanager.gestorweb.controller.dto.requests.CreateTeamRequest;
+import co.golmanager.gestorweb.controller.dto.responses.CreateTeamResponse;
+import co.golmanager.gestorweb.service.interfaces.TeamService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/teams")
@@ -26,8 +25,11 @@ public class TeamController {
 //    @GetMapping
 //    public List<Team> getTeams() {}
 //
-//    @PostMapping
-//    public ResponseEntity<> createTeam {}
-//
-//
+    @PostMapping("/{idTournament}")
+    public ResponseEntity<CreateTeamResponse> createTeam (@PathVariable Long idTournament, @Valid @RequestBody CreateTeamRequest createTeamRequest, Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(teamService.createTeamResponse(teamService.createTeam(createTeamRequest, email, idTournament)));
+    }
+
+
 }

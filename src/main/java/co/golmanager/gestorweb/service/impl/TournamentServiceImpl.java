@@ -1,24 +1,27 @@
-package co.golmanager.gestorweb.service;
+package co.golmanager.gestorweb.service.impl;
 
-import co.golmanager.gestorweb.controller.models.requests.CreateTournamentRequest;
-import co.golmanager.gestorweb.controller.models.responses.CreateTournamentResponse;
-import co.golmanager.gestorweb.controller.models.responses.TournamentDeleteResponse;
-import co.golmanager.gestorweb.controller.models.responses.TournamentDetailResponse;
-import co.golmanager.gestorweb.controller.models.responses.TournamentSummaryResponse;
+import co.golmanager.gestorweb.controller.dto.requests.CreateTournamentRequest;
+import co.golmanager.gestorweb.controller.dto.responses.CreateTournamentResponse;
+import co.golmanager.gestorweb.controller.dto.responses.TournamentDeleteResponse;
+import co.golmanager.gestorweb.controller.dto.responses.TournamentDetailResponse;
+import co.golmanager.gestorweb.controller.dto.responses.TournamentSummaryResponse;
 import co.golmanager.gestorweb.entity.Referee;
 import co.golmanager.gestorweb.entity.Tournament;
-import co.golmanager.gestorweb.entity.User;
 import co.golmanager.gestorweb.enums.TournamentFormat;
 import co.golmanager.gestorweb.repository.RefereeRepository;
 import co.golmanager.gestorweb.repository.TournamentRepository;
 import co.golmanager.gestorweb.repository.UserRepository;
+import co.golmanager.gestorweb.service.interfaces.TournamentService;
+import co.golmanager.gestorweb.service.interfaces.UserService;
+import co.golmanager.gestorweb.util.DateUtils;
+import co.golmanager.gestorweb.util.ValidationUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -31,12 +34,15 @@ public class TournamentServiceImpl implements TournamentService {
     private final RefereeRepository refereeRepository;
     private final UserRepository userRepository;
 
+    @Autowired
+    private final UserService userService;
+
     @Transactional
     @Override
     public List<TournamentSummaryResponse> getAllTournamentsById(String email) {
 
         //Comprueba que el id del usuario exista
-        var user = getUserByEmail(email);
+        var user = userService.getUserByEmail(email);
 
         List<Tournament> tournaments = tournamentRepository.findByUserId(user.getId());
 
@@ -50,13 +56,22 @@ public class TournamentServiceImpl implements TournamentService {
                         .build())
                 .toList();
     }
+    @Transactional
+    @Override
+    public Tournament getTournamentById(String email, Long tournamentId) {
+        var user = userService.getUserByEmail(email);
+        Tournament t = idTournamentValidation(tournamentId);
+        ValidationUtils.idAuthorizationValidation(user.getId(), t.getUser().getId());
+
+        return t;
+    }
 
     @Transactional
     @Override
-    public TournamentDetailResponse getTournamentById(String tournamentId, String email) {
+    public TournamentDetailResponse getTournamentResponseById(String tournamentId, String email) {
 
         //Comprueba que el id del usuario exista
-        var user = getUserByEmail(email);
+        var user = userService.getUserByEmail(email);
 
         Long id;
         try {
@@ -66,7 +81,7 @@ public class TournamentServiceImpl implements TournamentService {
         }
 
         Tournament t = idTournamentValidation(id);
-        idAuthorizationValidation(t.getUser().getId(), user.getId());
+        ValidationUtils.idAuthorizationValidation(t.getUser().getId(), user.getId());
 
         List<Long> refereeIds = t.getReferees().stream()
                 .map(Referee::getId)
@@ -89,7 +104,7 @@ public class TournamentServiceImpl implements TournamentService {
     @Transactional
     public CreateTournamentResponse createTournament(CreateTournamentRequest req, String email) {
 
-        dateValidation(req.getStartDate(), req.getEndDate());
+        DateUtils.dateValidation(req.getStartDate(), req.getEndDate()) ;
         OffsetDateTime dateCreated =  OffsetDateTime.now();
         Tournament t = Tournament.builder()
                 .name(req.getName())
@@ -103,7 +118,7 @@ public class TournamentServiceImpl implements TournamentService {
                 .build();
 
         if (email != null) {
-            var user = getUserByEmail(email);
+            var user = userService.getUserByEmail(email);
             t.setUser(user);
         }
 
@@ -133,15 +148,15 @@ public class TournamentServiceImpl implements TournamentService {
     public TournamentDetailResponse updateTournament
             (Long tournamentId, CreateTournamentRequest request, String email) {
 
-        var user = getUserByEmail(email);
+        var user = userService.getUserByEmail(email);
         Long id = idTournamentFormatValidation(tournamentId);
         Tournament t = idTournamentValidation(id);
-        idAuthorizationValidation(t.getUser().getId(), user.getId());
+        ValidationUtils.idAuthorizationValidation(t.getUser().getId(), user.getId());
 
         //Si el formato cambia, validar que este en la lista de formatos permitidos
         formatValidation(request.getFormat());
 
-        dateValidation(request.getStartDate(), request.getEndDate());
+        DateUtils.dateValidation(request.getStartDate(), request.getEndDate()) ;
 
         t.setName(request.getName());
         t.setStartDate(request.getStartDate());
@@ -170,11 +185,11 @@ public class TournamentServiceImpl implements TournamentService {
 
         // Implementation for deleting a tournament would go here
 
-        var user = getUserByEmail(email);
+        var user = userService.getUserByEmail(email);
         Long id = idTournamentFormatValidation(tournamentId);
         Tournament t = idTournamentValidation(id);
 
-        idAuthorizationValidation(t.getUser().getId(),user.getId());
+        ValidationUtils.idAuthorizationValidation(t.getUser().getId(),user.getId());
 
         Long logUser = t.getId();
         String logName = t.getName();
@@ -189,29 +204,12 @@ public class TournamentServiceImpl implements TournamentService {
                 .build();
     }
 
-    private void dateValidation (LocalDate startDate, LocalDate endDate) {
-        if (endDate.isBefore(startDate)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "endDate must be after startDate");
-        }
-    }
-
-    private User getUserByEmail(String email){
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-    }
-
     private void formatValidation (TournamentFormat format) {
         if (format != null ) {
             List<String> allowedFormats = List.of("LEAGUE", "DIRECT_ELIMINATION", "PLAY_OFF");
             if (!allowedFormats.contains(format.name())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid format. Allowed formats are: " + allowedFormats);
             }
-        }
-    }
-
-    private void idAuthorizationValidation (Long idOwnerTournament, Long idRequester) {
-        if (!idOwnerTournament.equals(idRequester)) {
-            throw new RuntimeException("Unauthorized to realize this action");
         }
     }
 

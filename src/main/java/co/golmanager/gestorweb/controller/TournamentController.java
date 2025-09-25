@@ -1,11 +1,11 @@
 package co.golmanager.gestorweb.controller;
 
-import co.golmanager.gestorweb.controller.models.requests.CreateTournamentRequest;
-import co.golmanager.gestorweb.controller.models.responses.CreateTournamentResponse;
-import co.golmanager.gestorweb.controller.models.responses.TournamentDeleteResponse;
-import co.golmanager.gestorweb.controller.models.responses.TournamentDetailResponse;
-import co.golmanager.gestorweb.controller.models.responses.TournamentSummaryResponse;
-import co.golmanager.gestorweb.service.TournamentService;
+import co.golmanager.gestorweb.controller.dto.requests.CreateTournamentRequest;
+import co.golmanager.gestorweb.controller.dto.responses.CreateTournamentResponse;
+import co.golmanager.gestorweb.controller.dto.responses.TournamentDeleteResponse;
+import co.golmanager.gestorweb.controller.dto.responses.TournamentDetailResponse;
+import co.golmanager.gestorweb.controller.dto.responses.TournamentSummaryResponse;
+import co.golmanager.gestorweb.service.interfaces.TournamentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +39,7 @@ class TournamentController {
     @GetMapping("/{Id}")
     public ResponseEntity<TournamentDetailResponse> getTournamentById(@PathVariable String Id, Authentication authentication) {
         String email = authentication.getName();
-        return ResponseEntity.ok(tournamentService.getTournamentById(Id, email));
+        return ResponseEntity.ok(tournamentService.getTournamentResponseById(Id, email));
     }
 
 

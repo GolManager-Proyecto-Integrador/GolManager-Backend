@@ -1,9 +1,10 @@
-package co.golmanager.gestorweb.service;
+package co.golmanager.gestorweb.service.impl;
 
-import co.golmanager.gestorweb.controller.models.responses.RefereeListResponse;
+import co.golmanager.gestorweb.controller.dto.responses.RefereeListResponse;
 import co.golmanager.gestorweb.entity.Referee;
 import co.golmanager.gestorweb.repository.RefereeRepository;
 import co.golmanager.gestorweb.repository.UserRepository;
+import co.golmanager.gestorweb.service.interfaces.RefereeService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

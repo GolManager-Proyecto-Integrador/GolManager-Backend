@@ -1,4 +1,4 @@
-package co.golmanager.gestorweb.service;
+package co.golmanager.gestorweb.service.impl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -13,8 +13,6 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
-
-import static io.jsonwebtoken.security.Keys.hmacShaKeyFor;
 
 @Service
 public class JwtService {

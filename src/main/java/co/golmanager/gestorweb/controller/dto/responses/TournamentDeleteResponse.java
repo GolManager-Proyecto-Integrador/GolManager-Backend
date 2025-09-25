@@ -1,4 +1,4 @@
-package co.golmanager.gestorweb.controller.models.responses;
+package co.golmanager.gestorweb.controller.dto.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

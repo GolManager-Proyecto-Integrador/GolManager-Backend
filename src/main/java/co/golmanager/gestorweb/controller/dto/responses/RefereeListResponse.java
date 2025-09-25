@@ -1,4 +1,4 @@
-package co.golmanager.gestorweb.controller.models.responses;
+package co.golmanager.gestorweb.controller.dto.responses;
 
 import co.golmanager.gestorweb.entity.Referee;
 import lombok.AllArgsConstructor;
