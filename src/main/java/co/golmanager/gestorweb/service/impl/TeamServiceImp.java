@@ -4,11 +4,13 @@ import co.golmanager.gestorweb.controller.dto.requests.CreateTeamRequest;
 import co.golmanager.gestorweb.controller.dto.responses.CreateTeamResponse;
 import co.golmanager.gestorweb.entity.Player;
 import co.golmanager.gestorweb.entity.Team;
-import co.golmanager.gestorweb.repository.PlayerRepository;
 import co.golmanager.gestorweb.repository.TeamRepository;
 import co.golmanager.gestorweb.service.interfaces.PlayerService;
+import co.golmanager.gestorweb.service.interfaces.TeamPositionService;
 import co.golmanager.gestorweb.service.interfaces.TeamService;
 import co.golmanager.gestorweb.service.interfaces.TournamentService;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +18,21 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 class TeamServiceImp implements TeamService {
 
     @Autowired
     private TournamentService tournamentService;
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private TeamPositionService teamPositionService;
 
     @Autowired
     private TeamRepository teamRepository;
-    @Autowired
-    private PlayerRepository playerRepository;
 
     @Override
+    @Transactional
     public Team createTeam(CreateTeamRequest request, String email, Long tournamentId) {
 
         Team team = Team.builder()
@@ -47,26 +51,15 @@ class TeamServiceImp implements TeamService {
         List<Player> players = request.getTeamPlayers().stream()
                 .map(player -> playerService.createPlayer(player, savedTeam))
                 .toList();
+        //Crear tabla de posiciones
+        teamPositionService.createTeamPosition(
+                tournamentService.getTournamentById(email, tournamentId), savedTeam);
 
-//        List<Player> players = request.getTeamPlayers().stream()
-//                .map(playerReq -> Player.builder()
-//                        .name(playerReq.getName())
-//                        .position(playerReq.getPlayerPosition())
-//                        .shirtNumber(playerReq.getShirtNumber())
-//                        .age(playerReq.getAge())
-//                        .team(savedTeam) // vincular al equipo
-//                        .build())
-//                .toList();
-//
-//        playerRepository.saveAll(players);
-//
-//        // 4. Retornar el equipo con jugadores
-//        savedTeam.setPlayers(players);
         return savedTeam;
     }
 
     @Override
     public CreateTeamResponse createTeamResponse(Team team) {
-        return CreateTeamResponse.builder().message("Equipo "+ team.getName() +"creado con exito con el id: " + team.getId()).build();
+        return CreateTeamResponse.builder().message("Equipo "+ team.getName() +" creado con exito con el id: " + team.getId()).build();
     }
 }
