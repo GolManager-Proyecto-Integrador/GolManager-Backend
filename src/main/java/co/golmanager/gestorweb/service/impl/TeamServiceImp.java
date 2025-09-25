@@ -6,6 +6,7 @@ import co.golmanager.gestorweb.entity.Player;
 import co.golmanager.gestorweb.entity.Team;
 import co.golmanager.gestorweb.repository.PlayerRepository;
 import co.golmanager.gestorweb.repository.TeamRepository;
+import co.golmanager.gestorweb.service.interfaces.PlayerService;
 import co.golmanager.gestorweb.service.interfaces.TeamService;
 import co.golmanager.gestorweb.service.interfaces.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ class TeamServiceImp implements TeamService {
 
     @Autowired
     private TournamentService tournamentService;
+    @Autowired
+    private PlayerService playerService;
 
     @Autowired
     private TeamRepository teamRepository;
@@ -39,6 +42,11 @@ class TeamServiceImp implements TeamService {
                 .build();
 
         Team savedTeam = teamRepository.save(team);
+
+        //Crear los jugadores asociados al equipo
+        List<Player> players = request.getTeamPlayers().stream()
+                .map(player -> playerService.createPlayer(player, savedTeam))
+                .toList();
 
 //        List<Player> players = request.getTeamPlayers().stream()
 //                .map(playerReq -> Player.builder()

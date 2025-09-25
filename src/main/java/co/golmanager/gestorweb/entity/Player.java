@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "tbl_player")
@@ -23,6 +25,7 @@ public class Player {
     private int age;
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "player_position")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private PlayerPosition position;
     private boolean starter; // true si es titular, false si es suplente
     @Column(name = "shirt_number")
@@ -35,6 +38,7 @@ public class Player {
     private int redCards;
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "player_status")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private PlayerStatus status;
 
     @ManyToOne(targetEntity = Team.class, fetch = FetchType.LAZY)
