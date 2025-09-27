@@ -1,8 +1,8 @@
 package co.golmanager.gestorweb.service.impl;
 
-import co.golmanager.gestorweb.controller.dto.responses.AuthResponse;
-import co.golmanager.gestorweb.controller.dto.requests.AuthenticationRequest;
-import co.golmanager.gestorweb.controller.dto.requests.RegisterRequest;
+import co.golmanager.gestorweb.presentation.dto.authentication.AuthResponse;
+import co.golmanager.gestorweb.presentation.dto.authentication.AuthenticationRequest;
+import co.golmanager.gestorweb.presentation.dto.authentication.RegisterRequest;
 import co.golmanager.gestorweb.entity.User;
 import co.golmanager.gestorweb.enums.Role;
 import co.golmanager.gestorweb.repository.UserRepository;

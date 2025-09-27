@@ -1,6 +1,6 @@
 package co.golmanager.gestorweb.service.interfaces;
 
-import co.golmanager.gestorweb.controller.dto.responses.RefereeListResponse;
+import co.golmanager.gestorweb.presentation.dto.referee.RefereeListResponse;
 import org.springframework.stereotype.Service;
 
 @Service

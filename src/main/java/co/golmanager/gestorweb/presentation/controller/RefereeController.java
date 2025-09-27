@@ -1,7 +1,7 @@
-package co.golmanager.gestorweb.controller;
+package co.golmanager.gestorweb.presentation.controller;
 
 
-import co.golmanager.gestorweb.controller.dto.responses.RefereeListResponse;
+import co.golmanager.gestorweb.presentation.dto.referee.RefereeListResponse;
 import co.golmanager.gestorweb.service.interfaces.RefereeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

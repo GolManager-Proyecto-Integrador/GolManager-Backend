@@ -1,4 +1,4 @@
-package co.golmanager.gestorweb.controller;
+package co.golmanager.gestorweb.presentation.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

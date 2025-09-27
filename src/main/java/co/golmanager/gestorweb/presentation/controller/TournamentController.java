@@ -1,10 +1,10 @@
-package co.golmanager.gestorweb.controller;
+package co.golmanager.gestorweb.presentation.controller;
 
-import co.golmanager.gestorweb.controller.dto.requests.CreateTournamentRequest;
-import co.golmanager.gestorweb.controller.dto.responses.CreateTournamentResponse;
-import co.golmanager.gestorweb.controller.dto.responses.TournamentDeleteResponse;
-import co.golmanager.gestorweb.controller.dto.responses.TournamentDetailResponse;
-import co.golmanager.gestorweb.controller.dto.responses.TournamentSummaryResponse;
+import co.golmanager.gestorweb.presentation.dto.tournament.CreateTournamentRequest;
+import co.golmanager.gestorweb.presentation.dto.tournament.CreateTournamentResponse;
+import co.golmanager.gestorweb.presentation.dto.tournament.TournamentDeleteResponse;
+import co.golmanager.gestorweb.presentation.dto.tournament.TournamentDetailResponse;
+import co.golmanager.gestorweb.presentation.dto.tournament.TournamentSummaryResponse;
 import co.golmanager.gestorweb.service.interfaces.TournamentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

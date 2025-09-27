@@ -34,7 +34,7 @@ public class Team {
 
     @ManyToOne(targetEntity = Tournament.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "tournament_id", nullable = false)
-    private Tournament tournamentId;
+    private Tournament tournament;
 
     @OneToOne(mappedBy = "team", targetEntity = TeamPosition.class, fetch = FetchType.LAZY)
     private TeamPosition teamPosition;

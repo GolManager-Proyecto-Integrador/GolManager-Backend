@@ -1,4 +1,4 @@
-package co.golmanager.gestorweb.controller.dto.requests;
+package co.golmanager.gestorweb.presentation.dto.player;
 
 import co.golmanager.gestorweb.enums.PlayerPosition;
 import jakarta.validation.constraints.NotNull;

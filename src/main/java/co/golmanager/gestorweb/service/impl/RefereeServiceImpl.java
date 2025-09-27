@@ -1,6 +1,6 @@
 package co.golmanager.gestorweb.service.impl;
 
-import co.golmanager.gestorweb.controller.dto.responses.RefereeListResponse;
+import co.golmanager.gestorweb.presentation.dto.referee.RefereeListResponse;
 import co.golmanager.gestorweb.entity.Referee;
 import co.golmanager.gestorweb.repository.RefereeRepository;
 import co.golmanager.gestorweb.repository.UserRepository;

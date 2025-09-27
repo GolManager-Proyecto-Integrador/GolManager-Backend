@@ -1,9 +1,10 @@
 package co.golmanager.gestorweb.service.impl;
 
-import co.golmanager.gestorweb.controller.dto.requests.CreateTeamRequest;
-import co.golmanager.gestorweb.controller.dto.responses.CreateTeamResponse;
+import co.golmanager.gestorweb.presentation.dto.team.CreateTeamRequest;
+import co.golmanager.gestorweb.presentation.dto.team.CreateTeamResponse;
 import co.golmanager.gestorweb.entity.Player;
 import co.golmanager.gestorweb.entity.Team;
+import co.golmanager.gestorweb.presentation.dto.team.GetTeamsTournamentResponse;
 import co.golmanager.gestorweb.repository.TeamRepository;
 import co.golmanager.gestorweb.service.interfaces.PlayerService;
 import co.golmanager.gestorweb.service.interfaces.TeamPositionService;
@@ -27,9 +28,9 @@ class TeamServiceImp implements TeamService {
     private PlayerService playerService;
     @Autowired
     private TeamPositionService teamPositionService;
-
     @Autowired
     private TeamRepository teamRepository;
+
 
     @Override
     @Transactional
@@ -42,7 +43,7 @@ class TeamServiceImp implements TeamService {
                 .mainStadium(request.getMainStadium())
                 .secondaryStadium(request.getSecondaryStadium())
                 .dateCreated(OffsetDateTime.now())
-                .tournamentId(tournamentService.getTournamentById(email, tournamentId))
+                .tournament(tournamentService.getTournamentById(email, tournamentId))
                 .build();
 
         Team savedTeam = teamRepository.save(team);
@@ -59,7 +60,26 @@ class TeamServiceImp implements TeamService {
     }
 
     @Override
-    public CreateTeamResponse createTeamResponse(Team team) {
+    public CreateTeamResponse createTeamResponse(CreateTeamRequest request, String email, Long tournamentId) {
+        Team team = createTeam(request,email,tournamentId);
         return CreateTeamResponse.builder().message("Equipo "+ team.getName() +" creado con exito con el id: " + team.getId()).build();
+    }
+
+    @Override
+    public List<Team> getAllTeamsByTournament(Long tournamentId) {
+        List<Team> teams = teamRepository.findByTournament_id(tournamentId);
+        return teams;
+    }
+
+    @Override
+    public List<GetTeamsTournamentResponse> getTeamsTournamentResponse(Long tournamentId, String email) {
+        List<Team> teams = getAllTeamsByTournament(tournamentId);
+       return teams.stream().map(t -> GetTeamsTournamentResponse.builder()
+                        .teamName(t.getName())
+                        .coachName(t.getCoach())
+                        .mainStadium(t.getMainStadium())
+                        .teamCategory(t.getCategory())
+                        .build())
+             .toList();
     }
 }

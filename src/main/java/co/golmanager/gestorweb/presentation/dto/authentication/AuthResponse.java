@@ -1,4 +1,4 @@
-package co.golmanager.gestorweb.controller.dto.responses;
+package co.golmanager.gestorweb.presentation.dto.authentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

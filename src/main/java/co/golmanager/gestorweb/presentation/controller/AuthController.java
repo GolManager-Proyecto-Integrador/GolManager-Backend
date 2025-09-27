@@ -1,9 +1,9 @@
-package co.golmanager.gestorweb.controller;
+package co.golmanager.gestorweb.presentation.controller;
 
 
-import co.golmanager.gestorweb.controller.dto.responses.AuthResponse;
-import co.golmanager.gestorweb.controller.dto.requests.AuthenticationRequest;
-import co.golmanager.gestorweb.controller.dto.requests.RegisterRequest;
+import co.golmanager.gestorweb.presentation.dto.authentication.AuthResponse;
+import co.golmanager.gestorweb.presentation.dto.authentication.AuthenticationRequest;
+import co.golmanager.gestorweb.presentation.dto.authentication.RegisterRequest;
 import co.golmanager.gestorweb.service.interfaces.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

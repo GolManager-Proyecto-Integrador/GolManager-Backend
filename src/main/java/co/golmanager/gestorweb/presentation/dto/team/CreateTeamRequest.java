@@ -1,6 +1,7 @@
-package co.golmanager.gestorweb.controller.dto.requests;
+package co.golmanager.gestorweb.presentation.dto.team;
 
 import co.golmanager.gestorweb.enums.TeamCategory;
+import co.golmanager.gestorweb.presentation.dto.player.CreatePlayerRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
