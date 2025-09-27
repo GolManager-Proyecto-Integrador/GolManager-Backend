@@ -30,7 +30,7 @@ class TournamentController {
 
     @Operation(summary = "Obtain all tournaments for the authenticated user", description = "Retrieves a list of all tournaments associated with the authenticated user.")
     @GetMapping
-    public ResponseEntity<List<TournamentSummaryResponse>> getAllTournamentsById(Authentication authentication) {
+    public ResponseEntity<List<TournamentSummaryResponse>> getAllTournamentsById(   Authentication authentication) {
         String email = authentication.getName();
         return ResponseEntity.ok(tournamentService.getAllTournamentsById(email));
     }

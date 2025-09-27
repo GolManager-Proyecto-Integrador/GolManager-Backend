@@ -10,7 +10,7 @@
     </parent>
     <groupId>co.golmanager</groupId>
     <artifactId>gestorweb</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>gestorweb</name>
     <description>Gestor web para competiciones de futbol 11. </description>
     <url/>
@@ -159,6 +159,27 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-maven-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
+                    <outputFileName>openapi.json</outputFileName>
+                    <outputDir>M:\Users\mahyro\Documents\Universidad\2025-2\Proyecto Integrador I\GolManager\GolManager-Backend\src\main\resources\static\docs</outputDir>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

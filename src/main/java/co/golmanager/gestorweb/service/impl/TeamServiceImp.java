@@ -66,6 +66,7 @@ class TeamServiceImp implements TeamService {
     }
 
     @Override
+    @Transactional
     public List<Team> getAllTeamsByTournament(Long tournamentId) {
         List<Team> teams = teamRepository.findByTournament_id(tournamentId);
         return teams;
