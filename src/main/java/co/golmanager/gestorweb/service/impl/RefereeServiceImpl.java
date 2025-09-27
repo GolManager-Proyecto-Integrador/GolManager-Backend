@@ -1,10 +1,8 @@
 package co.golmanager.gestorweb.service.impl;
 
-import co.golmanager.gestorweb.entity.Tournament;
 import co.golmanager.gestorweb.presentation.dto.referee.RefereeListResponse;
 import co.golmanager.gestorweb.entity.Referee;
 import co.golmanager.gestorweb.repository.RefereeRepository;
-import co.golmanager.gestorweb.repository.UserRepository;
 import co.golmanager.gestorweb.service.interfaces.RefereeService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -20,7 +18,7 @@ import java.util.List;
 public class RefereeServiceImpl implements RefereeService {
 
     private final RefereeRepository refereeRepository;
-    private final UserRepository userRepository;
+
 
     @Override
     @Transactional

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface MatchService {
-    public Match createMatch(Long tournamentId, CreateMatchRequest request, String email);
-    public CreateMatchResponse createMatchResponse(Long tournamentId, CreateMatchRequest request, String email);
+    Match createMatch(Long tournamentId, CreateMatchRequest request, String email);
+    CreateMatchResponse createMatchResponse(Long tournamentId, CreateMatchRequest request, String email);
 }

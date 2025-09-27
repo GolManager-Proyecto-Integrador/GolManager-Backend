@@ -1,7 +1,6 @@
 package co.golmanager.gestorweb.repository;
 
 import co.golmanager.gestorweb.entity.Team;
-import co.golmanager.gestorweb.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

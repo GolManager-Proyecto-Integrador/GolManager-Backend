@@ -5,6 +5,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
-    public User getUserByEmail(String email);
-    public Long getIdByEmail(String email);
+    User getUserByEmail(String email);
+    Long getIdByEmail(String email);
 }

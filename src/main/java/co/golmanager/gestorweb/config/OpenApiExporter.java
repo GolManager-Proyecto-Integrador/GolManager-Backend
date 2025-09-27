@@ -24,7 +24,8 @@ public class OpenApiExporter {
             output.getParentFile().mkdirs();
 
             try (FileWriter writer = new FileWriter(output)) {
-                writer.write(openApiJson);
+                assert openApiJson != null;
+                writer.write(openApiJson) ;
             }
 
             System.out.println("OpenAPI JSON exportado en: " + output.getAbsolutePath());

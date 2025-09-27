@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface TeamPositionService {
-    public TeamPosition createTeamPosition(Tournament tournament, Team team);
+    TeamPosition createTeamPosition(Tournament tournament, Team team);
 }

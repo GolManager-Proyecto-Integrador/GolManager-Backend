@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 class TournamentController {
 
-    @Autowired
     private final TournamentService tournamentService;
 
     @Operation(summary = "Obtain all tournaments for the authenticated user", description = "Retrieves a list of all tournaments associated with the authenticated user.")

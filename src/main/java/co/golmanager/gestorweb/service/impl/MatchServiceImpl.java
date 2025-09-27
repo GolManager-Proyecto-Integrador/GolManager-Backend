@@ -9,7 +9,6 @@ import co.golmanager.gestorweb.util.DateUtils;
 import co.golmanager.gestorweb.util.ValidationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +16,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MatchServiceImpl implements MatchService {
 
-    @Autowired
-    private MatchRepository matchRepository;
+
+    private final MatchRepository matchRepository;
 
     private final UserService userService;
     private final TeamService teamService;

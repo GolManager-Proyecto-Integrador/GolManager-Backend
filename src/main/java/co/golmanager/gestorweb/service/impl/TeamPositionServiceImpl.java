@@ -4,12 +4,10 @@ import co.golmanager.gestorweb.entity.Team;
 import co.golmanager.gestorweb.entity.TeamPosition;
 import co.golmanager.gestorweb.entity.Tournament;
 import co.golmanager.gestorweb.repository.TeamPositionRepository;
-import co.golmanager.gestorweb.repository.TeamRepository;
 import co.golmanager.gestorweb.service.interfaces.TeamPositionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TeamPositionServiceImpl implements TeamPositionService {
 
-    @Autowired
     private final TeamPositionRepository teamPositionRepository;
 
     @Override

@@ -1,8 +1,5 @@
 package co.golmanager.gestorweb.presentation.dto.match;
 
-
-
-import co.golmanager.gestorweb.entity.Tournament;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

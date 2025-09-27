@@ -10,12 +10,12 @@ import java.util.List;
 
 @Service
 public interface TeamService {
-    public Team createTeam(CreateTeamRequest request, String email, Long tournamentId);
-    public CreateTeamResponse createTeamResponse(CreateTeamRequest request, String email, Long tournamentId);
+    Team createTeam(CreateTeamRequest request, String email, Long tournamentId);
+    CreateTeamResponse createTeamResponse(CreateTeamRequest request, String email, Long tournamentId);
 
-    public List<Team> getAllTeamsByTournament(Long tournamentId);
-    public List<GetTeamsTournamentResponse> getTeamsTournamentResponse(Long tournamentId, String email);
+    List<Team> getAllTeamsByTournament(Long tournamentId);
+    List<GetTeamsTournamentResponse> getTeamsTournamentResponse(Long tournamentId, String email);
 
-    public Team getTeamById(Long tournamentId, String email, Long teamId);
+    Team getTeamById(Long tournamentId, String email, Long teamId);
 
 }

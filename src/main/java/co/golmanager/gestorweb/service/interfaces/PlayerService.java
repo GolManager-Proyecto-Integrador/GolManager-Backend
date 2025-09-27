@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface PlayerService {
-    public Player createPlayer(CreatePlayerRequest createPlayerRequest, Team team);
+    Player createPlayer(CreatePlayerRequest createPlayerRequest, Team team);
 }
