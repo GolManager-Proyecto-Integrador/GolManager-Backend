@@ -15,6 +15,7 @@ import co.golmanager.gestorweb.service.interfaces.TournamentService;
 import co.golmanager.gestorweb.service.interfaces.UserService;
 import co.golmanager.gestorweb.util.DateUtils;
 import co.golmanager.gestorweb.util.ValidationUtils;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +61,11 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     public Tournament getTournamentById(String email, Long tournamentId) {
         var user = userService.getUserByEmail(email);
-        Tournament t = idTournamentValidation(tournamentId);
-        ValidationUtils.idAuthorizationValidation(user.getId(), t.getUser().getId());
-
-        return t;
+        Tournament test = tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> new EntityNotFoundException("Tournament not found with id: " + tournamentId));
+        //Tournament t = idTournamentValidation(tournamentId);
+        ValidationUtils.idAuthorizationValidation(user.getId(), test.getUser().getId());
+        return test;
     }
 
     @Transactional

@@ -1,14 +1,14 @@
 package co.golmanager.gestorweb.entity;
 
-import co.golmanager.gestorweb.enums.MatchWinner;
+import co.golmanager.gestorweb.enums.match_winner;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -30,8 +30,9 @@ public class Match {
     @Column(name = "away_goals")
     private int awayGoals;
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "winner", columnDefinition = "match_winner")
-    private MatchWinner winner;
+    private match_winner winner;
 
     // Relación con el equipo local
     @ManyToOne(fetch = FetchType.LAZY)

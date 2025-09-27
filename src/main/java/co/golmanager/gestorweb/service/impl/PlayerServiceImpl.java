@@ -6,14 +6,15 @@ import co.golmanager.gestorweb.entity.Team;
 import co.golmanager.gestorweb.enums.PlayerStatus;
 import co.golmanager.gestorweb.repository.PlayerRepository;
 import co.golmanager.gestorweb.service.interfaces.PlayerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PlayerServiceImpl implements PlayerService {
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
     @Override
     public Player createPlayer(CreatePlayerRequest createPlayerRequest, Team team) {

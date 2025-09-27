@@ -1,5 +1,6 @@
 package co.golmanager.gestorweb.service.impl;
 
+import co.golmanager.gestorweb.entity.Tournament;
 import co.golmanager.gestorweb.presentation.dto.team.CreateTeamRequest;
 import co.golmanager.gestorweb.presentation.dto.team.CreateTeamResponse;
 import co.golmanager.gestorweb.entity.Player;
@@ -10,6 +11,8 @@ import co.golmanager.gestorweb.service.interfaces.PlayerService;
 import co.golmanager.gestorweb.service.interfaces.TeamPositionService;
 import co.golmanager.gestorweb.service.interfaces.TeamService;
 import co.golmanager.gestorweb.service.interfaces.TournamentService;
+import co.golmanager.gestorweb.util.ValidationUtils;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-class TeamServiceImp implements TeamService {
+class TeamServiceImpl implements TeamService {
 
     @Autowired
     private TournamentService tournamentService;
@@ -82,5 +85,15 @@ class TeamServiceImp implements TeamService {
                         .teamCategory(t.getCategory())
                         .build())
              .toList();
+    }
+
+    @Override
+    public Team getTeamById(Long tournamentId, String email, Long teamId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new EntityNotFoundException("Team not found with id: " + teamId));
+        Tournament tournament =  tournamentService.getTournamentById(email,tournamentId);
+        ValidationUtils.idAuthorizationValidation(tournament.getId(),team.getTournament().getId());
+
+        return team;
     }
 }

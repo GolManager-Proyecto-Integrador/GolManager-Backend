@@ -23,4 +23,11 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
+    @Override
+    @Transactional
+    public Long getIdByEmail(String email){
+        User user = getUserByEmail(email);
+        return user.getId();
+    }
+
 }

@@ -1,5 +1,6 @@
 package co.golmanager.gestorweb.service.interfaces;
 
+import co.golmanager.gestorweb.entity.Referee;
 import co.golmanager.gestorweb.presentation.dto.referee.RefereeListResponse;
 import org.springframework.stereotype.Service;
 
@@ -7,4 +8,5 @@ import org.springframework.stereotype.Service;
 public interface RefereeService {
 
     RefereeListResponse listReferees(String email);
+    Referee getReferee(Long refereeId);
 }

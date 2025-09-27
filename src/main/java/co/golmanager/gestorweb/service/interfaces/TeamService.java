@@ -15,4 +15,7 @@ public interface TeamService {
 
     public List<Team> getAllTeamsByTournament(Long tournamentId);
     public List<GetTeamsTournamentResponse> getTeamsTournamentResponse(Long tournamentId, String email);
+
+    public Team getTeamById(Long tournamentId, String email, Long teamId);
+
 }

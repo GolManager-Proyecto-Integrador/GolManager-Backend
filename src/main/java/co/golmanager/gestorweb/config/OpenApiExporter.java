@@ -27,9 +27,9 @@ public class OpenApiExporter {
                 writer.write(openApiJson);
             }
 
-            System.out.println("✅ OpenAPI JSON exportado en: " + output.getAbsolutePath());
+            System.out.println("OpenAPI JSON exportado en: " + output.getAbsolutePath());
         } catch (Exception e) {
-            System.err.println("❌ Error exportando OpenAPI: " + e.getMessage());
+            System.err.println("Error exportando OpenAPI: " + e.getMessage());
         }
     }
 }

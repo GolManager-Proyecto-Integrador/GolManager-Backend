@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class TeamPositionServiceImpl implements TeamPositionService {
 
     @Autowired
-    private TeamPositionRepository teamPositionRepository;
+    private final TeamPositionRepository teamPositionRepository;
 
     @Override
     @Transactional
@@ -33,7 +33,6 @@ public class TeamPositionServiceImpl implements TeamPositionService {
                 .matchesTied(0)
                 .points(0)
                 .build();
-
         TeamPosition teamPositionSaved = teamPositionRepository.save(teamPosition);
 
         return teamPositionSaved;
