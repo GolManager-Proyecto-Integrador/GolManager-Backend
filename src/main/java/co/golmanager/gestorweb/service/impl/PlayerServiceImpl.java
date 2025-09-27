@@ -7,9 +7,11 @@ import co.golmanager.gestorweb.enums.PlayerStatus;
 import co.golmanager.gestorweb.repository.PlayerRepository;
 import co.golmanager.gestorweb.service.interfaces.PlayerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PlayerServiceImpl implements PlayerService {
@@ -29,6 +31,7 @@ public class PlayerServiceImpl implements PlayerService {
                 .build();
 
         Player savedPlayer = playerRepository.save(player);
+        log.info("Player created: name={}, team={}", player.getName(), player.getTeam().getName());
 
         return savedPlayer;
     }

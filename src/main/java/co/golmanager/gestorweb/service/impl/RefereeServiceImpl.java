@@ -9,10 +9,12 @@ import co.golmanager.gestorweb.service.interfaces.RefereeService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RefereeServiceImpl implements RefereeService {
@@ -24,6 +26,7 @@ public class RefereeServiceImpl implements RefereeService {
     @Transactional
     public RefereeListResponse listReferees(String email) {
         List<Referee> listReferee = refereeRepository.findAll();
+        log.info("listReferee={}", listReferee);
         return RefereeListResponse.builder()
                 .referees(listReferee)
                 .build();

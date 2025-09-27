@@ -8,9 +8,11 @@ import co.golmanager.gestorweb.repository.TeamRepository;
 import co.golmanager.gestorweb.service.interfaces.TeamPositionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TeamPositionServiceImpl implements TeamPositionService {
@@ -34,6 +36,7 @@ public class TeamPositionServiceImpl implements TeamPositionService {
                 .points(0)
                 .build();
         TeamPosition teamPositionSaved = teamPositionRepository.save(teamPosition);
+        log.info("TeamPosition created for team: {}", teamPositionSaved.getTeam().getName());
 
         return teamPositionSaved;
     }

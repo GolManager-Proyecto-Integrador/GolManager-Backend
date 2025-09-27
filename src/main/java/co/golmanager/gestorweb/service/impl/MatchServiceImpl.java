@@ -8,11 +8,13 @@ import co.golmanager.gestorweb.service.interfaces.*;
 import co.golmanager.gestorweb.util.DateUtils;
 import co.golmanager.gestorweb.util.ValidationUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MatchServiceImpl implements MatchService {
 
     @Autowired
@@ -36,7 +38,7 @@ public class MatchServiceImpl implements MatchService {
                 .build();
 
         Match savedMatch = matchRepository.save(match);
-
+        log.info("Created Match with ID: {}", savedMatch.getId());
         return savedMatch;
     }
 

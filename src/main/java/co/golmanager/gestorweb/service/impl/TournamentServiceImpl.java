@@ -10,7 +10,6 @@ import co.golmanager.gestorweb.entity.Tournament;
 import co.golmanager.gestorweb.enums.TournamentFormat;
 import co.golmanager.gestorweb.repository.RefereeRepository;
 import co.golmanager.gestorweb.repository.TournamentRepository;
-import co.golmanager.gestorweb.repository.UserRepository;
 import co.golmanager.gestorweb.service.interfaces.TournamentService;
 import co.golmanager.gestorweb.service.interfaces.UserService;
 import co.golmanager.gestorweb.util.DateUtils;
@@ -18,6 +17,7 @@ import co.golmanager.gestorweb.util.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,15 +27,13 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TournamentServiceImpl implements TournamentService {
 
     private final TournamentRepository tournamentRepository;
     private final RefereeRepository refereeRepository;
-    private final UserRepository userRepository;
-
-    @Autowired
     private final UserService userService;
 
     @Transactional
@@ -46,6 +44,7 @@ public class TournamentServiceImpl implements TournamentService {
         var user = userService.getUserByEmail(email);
 
         List<Tournament> tournaments = tournamentRepository.findByUserId(user.getId());
+        log.info("Getting all tournaments for user: {}", email);
 
         return tournaments.stream().map(t -> TournamentSummaryResponse.builder()
                         .id(t.getId())
@@ -61,11 +60,11 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     public Tournament getTournamentById(String email, Long tournamentId) {
         var user = userService.getUserByEmail(email);
-        Tournament test = tournamentRepository.findById(tournamentId)
+        Tournament t = tournamentRepository.findById(tournamentId)
                 .orElseThrow(() -> new EntityNotFoundException("Tournament not found with id: " + tournamentId));
-        //Tournament t = idTournamentValidation(tournamentId);
-        ValidationUtils.idAuthorizationValidation(user.getId(), test.getUser().getId());
-        return test;
+        ValidationUtils.idAuthorizationValidation(user.getId(), t.getUser().getId());
+        log.info("Getting tournament by id: {}", t.getName());
+        return t;
     }
 
     @Transactional
@@ -169,6 +168,7 @@ public class TournamentServiceImpl implements TournamentService {
         t.setYellowCardsSuspension(request.getYellowCardsSuspension());
 
         var saved = tournamentRepository.save(t);
+        log.info("Tournament {}  with id {} updated", saved.getId(), saved.getId());
 
         return TournamentDetailResponse.builder()
                 .id(saved.getId())
@@ -198,6 +198,7 @@ public class TournamentServiceImpl implements TournamentService {
 
         tournamentRepository.delete(t);
         LocalDateTime deleteTime = LocalDateTime.now();
+        log.info("Tournament {}  with id {} deleted", logUser, logName);
 
         return TournamentDeleteResponse.builder()
                 .tournamentId(logUser)
