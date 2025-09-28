@@ -1,10 +1,9 @@
 package co.golmanager.gestorweb.service.impl;
 
 import co.golmanager.gestorweb.entity.Tournament;
-import co.golmanager.gestorweb.presentation.dto.team.CreateTeamRequest;
-import co.golmanager.gestorweb.presentation.dto.team.CreateTeamResponse;
+import co.golmanager.gestorweb.presentation.dto.generalDto.GeneralDeleteResponse;
+import co.golmanager.gestorweb.presentation.dto.team.*;
 import co.golmanager.gestorweb.entity.Team;
-import co.golmanager.gestorweb.presentation.dto.team.GetTeamsTournamentResponse;
 import co.golmanager.gestorweb.repository.TeamRepository;
 import co.golmanager.gestorweb.service.interfaces.PlayerService;
 import co.golmanager.gestorweb.service.interfaces.TeamPositionService;
@@ -14,11 +13,14 @@ import co.golmanager.gestorweb.util.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 class TeamServiceImpl implements TeamService {
@@ -72,9 +74,9 @@ class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
-    public List<GetTeamsTournamentResponse> getTeamsTournamentResponse(Long tournamentId, String email) {
+    public List<GetTeamsTournamentSummaryResponse> getTeamsTournamentResponse(Long tournamentId, String email) {
         List<Team> teams = getAllTeamsByTournament(tournamentId);
-       return teams.stream().map(t -> GetTeamsTournamentResponse.builder()
+       return teams.stream().map(t -> GetTeamsTournamentSummaryResponse.builder()
                         .teamName(t.getName())
                         .coachName(t.getCoach())
                         .mainStadium(t.getMainStadium())
@@ -82,7 +84,7 @@ class TeamServiceImpl implements TeamService {
                         .build())
              .toList();
     }
-
+    @Transactional
     @Override
     public Team getTeamById(Long tournamentId, String email, Long teamId) {
         Team team = teamRepository.findById(teamId)
@@ -91,5 +93,68 @@ class TeamServiceImpl implements TeamService {
         ValidationUtils.idAuthorizationValidation(tournament.getId(),team.getTournament().getId());
 
         return team;
+    }
+
+    @Transactional
+    @Override
+    public TeamDetailsResponse getTeamDetailsResponse(Long tournamentId, String email, Long teamId) {
+        Team team = getTeamById(tournamentId,email,teamId);
+        return TeamDetailsResponse.builder()
+                .teamId(team.getId())
+                .name(team.getName())
+                .coach(team.getCoach())
+                .category(team.getCategory())
+                .mainStadium(team.getMainStadium())
+                .secondaryStadium(team.getSecondaryStadium())
+                .dateCreated(OffsetDateTime.now())
+                .build();
+    }
+
+    @Transactional
+    @Override
+    public Team updateTeam(Long teamId, Long tournamentId, UpdateTeamRequest request, String email) {
+        Team team = getTeamById(tournamentId, email, teamId);
+
+        team.setName(request.getName());
+        team.setCoach(request.getCoach());
+        team.setCategory(request.getTeamCategory());
+        team.setMainStadium(request.getMainStadium());
+        team.setSecondaryStadium(request.getSecondaryStadium());
+
+        Team savedTeam = teamRepository.save(team);
+        log.info("Team with the id {} was updated", savedTeam.getId());
+        return savedTeam;
+
+    }
+
+    @Transactional
+    @Override
+    public TeamDetailsResponse updateTeamResponse(Long teamId, Long tournamentId, UpdateTeamRequest request, String email) {
+        Team team = updateTeam(teamId, tournamentId, request, email);
+        return TeamDetailsResponse.builder()
+                .teamId(team.getId())
+                .name(team.getName())
+                .coach(team.getCoach())
+                .category(team.getCategory())
+                .mainStadium(team.getMainStadium())
+                .secondaryStadium(team.getSecondaryStadium())
+                .dateCreated(OffsetDateTime.now())
+                .build();
+    }
+
+    @Transactional
+    @Override
+    public GeneralDeleteResponse deleteTeam(Long teamId, Long tournamentId, String email) {
+        Team team = getTeamById(tournamentId, email, teamId);
+        String teamName = team.getName();
+        LocalDateTime deleteDateTime = LocalDateTime.now();
+        teamRepository.delete(team);
+        log.info("Team {} with the id {} was removed", teamName, teamId);
+
+        return GeneralDeleteResponse.builder()
+                .elementId(teamId)
+                .elementName(teamName)
+                .deletionElementDate(deleteDateTime)
+                .build();
     }
 }

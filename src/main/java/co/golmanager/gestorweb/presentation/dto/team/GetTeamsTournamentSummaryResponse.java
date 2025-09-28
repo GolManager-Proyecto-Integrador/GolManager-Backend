@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetTeamsTournamentResponse {
+public class GetTeamsTournamentSummaryResponse {
     private String teamName;
     private String coachName;
     private String mainStadium;
