@@ -16,8 +16,7 @@ import org.springframework.context.annotation.Configuration;
                 version = "0.2-SNAPSHOT",
                 description = "API for managing soccer tournaments, teams, players, and referees.",
                 contact = @Contact(
-                        name = "Mateo Vargas Tirado - Luis Carlos Vanegas Zapata",
-                        email = "mateo.vargast@udea.edu.co - lcarlos.vanegas@udea.edu.co"
+                        name = "Mateo Vargas Tirado - Luis Carlos Vanegas Zapata"
                 ),
                 license = @License(
                         name = " AGPL-3.0 license"
