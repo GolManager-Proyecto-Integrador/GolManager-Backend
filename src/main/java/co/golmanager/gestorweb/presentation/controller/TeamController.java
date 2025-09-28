@@ -44,16 +44,16 @@ public class TeamController {
     }
 
     @Operation(summary = "Update an existing tournament", description = "Update the details of existing tournament identified by its ID.")
-    @PutMapping("/{teamId}")
-    public ResponseEntity<TeamDetailsResponse> updateTeamInfo (@PathVariable Long teamId, @PathVariable Long idTournament, @Valid @RequestBody UpdateTeamRequest request, Authentication authentication) {
+    @PutMapping("/{idTeam}")
+    public ResponseEntity<TeamDetailsResponse> updateTeamInfo (@PathVariable Long idTeam, @PathVariable Long idTournament, @Valid @RequestBody UpdateTeamRequest request, Authentication authentication) {
         String email = authentication.getName();
-        return ResponseEntity.ok(teamService.updateTeamResponse(teamId, idTournament, request, email));
+        return ResponseEntity.ok(teamService.updateTeamResponse(idTeam, idTournament, request, email));
     }
 
     @Operation(summary = "Delete an team", description = "Delete team (players, score, goals, cards) of existing tournament")
-    @DeleteMapping("/{teamId}")
-    public ResponseEntity<GeneralDeleteResponse> deleteTeam(@PathVariable Long idTournament, @PathVariable Long teamId, Authentication authentication) {
-      return ResponseEntity.ok(teamService.deleteTeam(teamId, idTournament, authentication.getName()));
+    @DeleteMapping("/{idTeam}")
+    public ResponseEntity<GeneralDeleteResponse> deleteTeam(@PathVariable Long idTournament, @PathVariable Long idTeam, Authentication authentication) {
+      return ResponseEntity.ok(teamService.deleteTeam(idTeam, idTournament, authentication.getName()));
     }
 
 }
