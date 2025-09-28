@@ -3,6 +3,10 @@ package co.golmanager.gestorweb.entity;
 import co.golmanager.gestorweb.enums.TeamCategory;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "tbl_team")
@@ -17,12 +21,15 @@ public class Team {
     private String name;
     private String coach;
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "team_category")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column( columnDefinition = "team_category")
     private TeamCategory category;
     @Column(name = "main_stadium")
     private String mainStadium;
     @Column(name = "secondary_stadium")
     private String secondaryStadium;
+    @Column(name = "date_created", columnDefinition = "timestamptz")
+    private OffsetDateTime dateCreated;
 
     @ManyToOne(targetEntity = Tournament.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "tournament_id", nullable = false)

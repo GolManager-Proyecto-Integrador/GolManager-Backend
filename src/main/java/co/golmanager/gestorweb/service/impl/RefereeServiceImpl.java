@@ -1,0 +1,40 @@
+package co.golmanager.gestorweb.service.impl;
+
+import co.golmanager.gestorweb.presentation.dto.referee.RefereeListResponse;
+import co.golmanager.gestorweb.entity.Referee;
+import co.golmanager.gestorweb.repository.RefereeRepository;
+import co.golmanager.gestorweb.service.interfaces.RefereeService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class RefereeServiceImpl implements RefereeService {
+
+    private final RefereeRepository refereeRepository;
+
+
+    @Override
+    @Transactional
+    public RefereeListResponse listReferees(String email) {
+        List<Referee> listReferee = refereeRepository.findAll();
+        log.info("listReferee={}", listReferee);
+        return RefereeListResponse.builder()
+                .referees(listReferee)
+                .build();
+
+    }
+
+    public Referee getReferee(Long refereeId) {
+        return refereeRepository.findById(refereeId)
+                .orElseThrow(() -> new EntityNotFoundException("referee not found with id: " + refereeId));
+
+    }
+
+}

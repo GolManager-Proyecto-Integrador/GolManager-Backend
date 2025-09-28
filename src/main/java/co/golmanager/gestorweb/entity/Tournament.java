@@ -10,6 +10,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "tbl_tournament")
@@ -37,6 +38,8 @@ public class Tournament {
     private boolean homeAndAway;
     @Column(name = "yellow_cards_suspension")
     private int yellowCardsSuspension;
+    @Column(name = "date_created", columnDefinition = "timestamptz")
+    private OffsetDateTime dateCreated;
 
     @ManyToOne (targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

@@ -1,5 +1,6 @@
 package co.golmanager.gestorweb.config;
 
+import co.golmanager.gestorweb.service.impl.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
     private final UserDetailsService userDetailsService;
-    private final co.golmanager.gestorweb.service.JwtService jwtService;
+    private final JwtService jwtService;
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
