@@ -1,4 +1,4 @@
-package co.golmanager.gestorweb.config;
+package co.golmanager.gestorweb.config.security;
 
 import co.golmanager.gestorweb.service.impl.JwtService;
 import jakarta.servlet.FilterChain;

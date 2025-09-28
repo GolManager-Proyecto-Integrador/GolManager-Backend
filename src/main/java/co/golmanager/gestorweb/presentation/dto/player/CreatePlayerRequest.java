@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 public class CreatePlayerRequest {
     @NotNull
     private String name;
-    @NotNull
     private int age;
     @NotNull
     private PlayerPosition playerPosition;

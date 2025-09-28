@@ -1,4 +1,4 @@
-package co.golmanager.gestorweb.config;
+package co.golmanager.gestorweb.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,10 +27,12 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthentificationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http.csrf(csrf ->       csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(publicEndpoints()).permitAll()
@@ -40,7 +42,12 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(customAuthenticationEntryPoint) // 401
+                        .accessDeniedHandler(customAccessDeniedHandler)           // 403
+                );
+
         return http.build();
     }
 
@@ -62,11 +69,10 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/api/greeting/sayHelloPublic"),
                 new AntPathRequestMatcher("/api/auth/register"),
                 new AntPathRequestMatcher("/api/auth/login"),
-                new AntPathRequestMatcher("/v3/api-docs/**"),
-                new AntPathRequestMatcher("/swagger-ui/**"),
-                new AntPathRequestMatcher("/swagger-ui.html"),
+                new AntPathRequestMatcher("/v3/api-docs/**", null),
+                new AntPathRequestMatcher("/swagger-ui/**", null),
+                new AntPathRequestMatcher("/swagger-ui.html", null),
                 new AntPathRequestMatcher("/api/greeting/time")
-
         );
     }
 
