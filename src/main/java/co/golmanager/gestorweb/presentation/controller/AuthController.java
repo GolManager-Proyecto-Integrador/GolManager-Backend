@@ -4,6 +4,8 @@ package co.golmanager.gestorweb.presentation.controller;
 import co.golmanager.gestorweb.presentation.dto.authentication.AuthResponse;
 import co.golmanager.gestorweb.presentation.dto.authentication.AuthenticationRequest;
 import co.golmanager.gestorweb.presentation.dto.authentication.RegisterRequest;
+import co.golmanager.gestorweb.presentation.dto.authentication.RegisterResponse;
+import co.golmanager.gestorweb.presentation.dto.generalDto.GeneralErrorResponse;
 import co.golmanager.gestorweb.service.interfaces.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,16 +13,17 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Tag(name = "Authentication", description = "Controller of Auth")
-@Slf4j
 public class AuthController {
 
 
@@ -28,8 +31,9 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authService.register(request));
+
+    public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest request, Authentication authentication) {
+        return ResponseEntity.ok(authService.register(request, authentication.getName()));
 
     }
 
@@ -50,7 +54,7 @@ public class AuthController {
                             }
                     )
             ),
-            responses = @ApiResponse(
+            responses = {@ApiResponse(
                     responseCode = "200",
                     description = "Succesful authentication",
                     content = @Content(
@@ -63,7 +67,27 @@ public class AuthController {
                                 )
                             }
                     )
+            ), @ApiResponse(
+                    responseCode = "401",
+                    description = "Unsuccesful authentication",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GeneralErrorResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Unsuccessful Login",
+                                            value = "{\n" +
+                                                    "    \"path\": \"/api/auth/login\",\n" +
+                                                    "    \"error\": \"Unauthorized\",\n" +
+                                                    "    \"message\": \"No autorizado o token inválido\",\n" +
+                                                    "    \"status\": 401\n" +
+                                                    "}"
+                                    )
+                            }
+                    )
             )
+            }
+
 
 
     )
