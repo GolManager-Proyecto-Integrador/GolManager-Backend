@@ -31,7 +31,7 @@ public class Match {
     private int awayGoals;
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name = "winner", columnDefinition = "match_winner")
+    @Column(name = "winner", columnDefinition = "matchwinner")
     private match_winner winner;
 
     // Relación con el equipo local

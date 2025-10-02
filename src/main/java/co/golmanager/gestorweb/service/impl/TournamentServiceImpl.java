@@ -64,7 +64,7 @@ public class TournamentServiceImpl implements TournamentService {
         Optional<Tournament> t = tournamentRepository.findById(tournamentId);
 
         if (t.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament id: " + tournamentId + " not found");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament id: " + tournamentId + " not found");
         }
         ValidationUtils.idAuthorizationValidation(user.getId(), t.get().getUser().getId());
         log.info("Getting tournament by id: {}", t.get().getName());

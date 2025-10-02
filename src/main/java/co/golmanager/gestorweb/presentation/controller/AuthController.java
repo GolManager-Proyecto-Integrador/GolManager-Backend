@@ -135,12 +135,13 @@ public class AuthController {
                             examples = {
                                     @ExampleObject(
                                             name = "Unsuccessful Login",
-                                            value = "{\n" +
-                                                    "    \"path\": \"/api/auth/login\",\n" +
-                                                    "    \"error\": \"Unauthorized\",\n" +
-                                                    "    \"message\": \"No autorizado o token inválido\",\n" +
-                                                    "    \"status\": 401\n" +
-                                                    "}"
+                                            value = """
+                                                    {
+                                                        "path": "/api/auth/login",
+                                                        "error": "Unauthorized",
+                                                        "message": "No autorizado o token inválido",
+                                                        "status": 401
+                                                    }"""
                                     )
                             }
                     )

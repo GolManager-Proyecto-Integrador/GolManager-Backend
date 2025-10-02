@@ -24,7 +24,7 @@ public class Player {
     private String name;
     private int age;
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "player_position")
+    @Column(columnDefinition = "playerposition")
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private PlayerPosition position;
     private boolean starter; // true si es titular, false si es suplente
@@ -37,7 +37,7 @@ public class Player {
     @Column(name = "red_cards")
     private int redCards;
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "player_status")
+    @Column(columnDefinition = "playerstatus")
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private PlayerStatus status;
 

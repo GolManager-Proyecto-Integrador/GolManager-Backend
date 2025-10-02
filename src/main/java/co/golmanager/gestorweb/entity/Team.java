@@ -22,7 +22,7 @@ public class Team {
     private String coach;
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column( columnDefinition = "team_category")
+    @Column( columnDefinition = "teamcategory")
     private TeamCategory category;
     @Column(name = "main_stadium")
     private String mainStadium;

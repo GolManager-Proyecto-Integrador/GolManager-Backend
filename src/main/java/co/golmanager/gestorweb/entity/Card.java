@@ -22,7 +22,7 @@ public class Card {
     private int minute;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "card_type")
+    @Column(columnDefinition = "cardtype")
     private CardColor color;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -22,7 +22,6 @@ public class CreateTeamRequest {
     private TeamCategory teamCategory;
     @NotNull
     private String mainStadium;
-    @NotNull
     private String secondaryStadium;
     @NotNull
     private List<CreatePlayerRequest> teamPlayers;
