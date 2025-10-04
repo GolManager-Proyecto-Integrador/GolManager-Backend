@@ -31,7 +31,7 @@ public class RefereeController {
             description = "Bring the list of referees registered in the database.",
             responses = {@ApiResponse(
                     responseCode = "200",
-                    description = "List of referees obtained correctly",
+                    description = "List of referees obtained",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = RefereeListResponse.class),
