@@ -20,11 +20,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -59,11 +61,14 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     public Tournament getTournamentById(String email, Long tournamentId) {
         var user = userService.getUserByEmail(email);
-        Tournament t = tournamentRepository.findById(tournamentId)
-                .orElseThrow(() -> new EntityNotFoundException("Tournament not found with id: " + tournamentId));
-        ValidationUtils.idAuthorizationValidation(user.getId(), t.getUser().getId());
-        log.info("Getting tournament by id: {}", t.getName());
-        return t;
+        Optional<Tournament> t = tournamentRepository.findById(tournamentId);
+
+        if (t.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament id: " + tournamentId + " not found");
+        }
+        ValidationUtils.idAuthorizationValidation(user.getId(), t.get().getUser().getId());
+        log.info("Getting tournament by id: {}", t.get().getName());
+        return t.get();
     }
 
     @Transactional

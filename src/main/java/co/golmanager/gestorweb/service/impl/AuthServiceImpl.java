@@ -5,14 +5,19 @@ import co.golmanager.gestorweb.presentation.dto.authentication.AuthenticationReq
 import co.golmanager.gestorweb.presentation.dto.authentication.RegisterRequest;
 import co.golmanager.gestorweb.entity.User;
 import co.golmanager.gestorweb.enums.Role;
+import co.golmanager.gestorweb.presentation.dto.authentication.RegisterResponse;
 import co.golmanager.gestorweb.repository.UserRepository;
 import co.golmanager.gestorweb.service.interfaces.AuthService;
+import co.golmanager.gestorweb.service.interfaces.UserService;
+import co.golmanager.gestorweb.util.ValidationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +28,11 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 
     @Override
-    public AuthResponse register(RegisterRequest request) {
+    public RegisterResponse register(RegisterRequest request, String requesterEmail) {
+        ValidationUtils.roleAuthorizationValidation(userService.getUserByEmail(requesterEmail));
         var user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
@@ -35,8 +42,14 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         log.info("Register request: username={}, email={}, role={}",
-                user.getUsername(), user.getEmail(), user.getRole());
-        return AuthResponse.builder().token(jwtToken).build();
+                user.getName(), user.getEmail(), user.getRole());
+        return RegisterResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .status(200)
+                .token(jwtToken)
+                .build();
     }
 
     @Override

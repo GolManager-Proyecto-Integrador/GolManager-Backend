@@ -37,8 +37,8 @@ class TeamServiceImpl implements TeamService {
     public Team createTeam(CreateTeamRequest request, String email, Long tournamentId) {
 
         Team team = Team.builder()
-                .name(request.getName())
-                .coach(request.getCoach())
+                .name(request.getTeamName())
+                .coach(request.getCoachName())
                 .category(request.getTeamCategory())
                 .mainStadium(request.getMainStadium())
                 .secondaryStadium(request.getSecondaryStadium())
