@@ -24,8 +24,7 @@ public class Player {
     private String name;
     private int age;
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "playerposition")
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "player_position")
     private PlayerPosition position;
     private boolean starter; // true si es titular, false si es suplente
     @Column(name = "shirt_number")
@@ -37,8 +36,7 @@ public class Player {
     @Column(name = "red_cards")
     private int redCards;
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "playerstatus")
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "player_status")
     private PlayerStatus status;
 
     @ManyToOne(targetEntity = Team.class, fetch = FetchType.LAZY)

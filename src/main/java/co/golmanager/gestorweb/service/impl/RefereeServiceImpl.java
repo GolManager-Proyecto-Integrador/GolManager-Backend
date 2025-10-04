@@ -27,7 +27,7 @@ public class RefereeServiceImpl implements RefereeService {
     public RefereeListResponse listReferees(String email) {
         Optional<List<Referee>> listReferee = Optional.of(refereeRepository.findAll());
         if (listReferee.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The list of referees is empty.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There are no referees registered in the system.");
         }
         log.info("listReferee={}", listReferee);
         return RefereeListResponse.builder()

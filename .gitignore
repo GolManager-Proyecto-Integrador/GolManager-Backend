@@ -9,3 +9,5 @@
 
 target/
 .idea/
+/%USERPROFILE%AppDataLocalTemp/
+src/main/resources/application.properties

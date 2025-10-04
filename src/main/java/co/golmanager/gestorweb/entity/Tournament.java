@@ -29,8 +29,7 @@ public class Tournament {
     @Column(name = "end_date", columnDefinition = "DATE")
     private LocalDate endDate;
     @Enumerated(EnumType.STRING)
-    @Column(name= "format",columnDefinition = "tournamentformat")
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name= "format")
     private TournamentFormat format;
     @Column(name = "number_of_teams")
     private int numberOfTeams;

@@ -21,8 +21,7 @@ public class Team {
     private String name;
     private String coach;
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column( columnDefinition = "teamcategory")
+    @Column( name = "team_category")
     private TeamCategory category;
     @Column(name = "main_stadium")
     private String mainStadium;

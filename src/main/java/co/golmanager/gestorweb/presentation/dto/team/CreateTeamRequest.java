@@ -16,8 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateTeamRequest {
     @NotNull
-    private String name;
-    private String coach;
+    private String teamName;
+    @NotNull
+    private String coachName;
     @NotNull
     private TeamCategory teamCategory;
     @NotNull

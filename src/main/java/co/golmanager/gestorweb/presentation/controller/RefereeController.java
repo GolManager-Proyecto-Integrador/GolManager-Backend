@@ -1,8 +1,5 @@
 package co.golmanager.gestorweb.presentation.controller;
 
-
-import co.golmanager.gestorweb.presentation.dto.authentication.AuthResponse;
-import co.golmanager.gestorweb.presentation.dto.authentication.AuthenticationRequest;
 import co.golmanager.gestorweb.presentation.dto.generalDto.GeneralErrorResponse;
 import co.golmanager.gestorweb.presentation.dto.referee.RefereeListResponse;
 import co.golmanager.gestorweb.service.interfaces.RefereeService;
@@ -37,29 +34,29 @@ public class RefereeController {
                     description = "List of referees obtained correctly",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = AuthResponse.class),
+                            schema = @Schema(implementation = RefereeListResponse.class),
                             examples = {
                                     @ExampleObject(
                                             name = "Referees list",
-                                            value = "{\"Token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6Im9yZ2FuaXphZG9yQHRvcm5lb3MuY29tIiwiaWF0IjoxNzU4OTMxMzk0LCJleHAiOjE3NTg5Mzg1OTR9.9EfE3GP_ZfVFDHIaxpbmVAS3_NajHdJySi8kSRe4dpA\"}"
+                                            value = "{\"referees\":[{\"id\":1,\"name\":\"Wilmar Roldan\"},{\"id\":2,\"name\":\"Nicolas Gallo\"},{\"id\":3,\"name\":\"Carlos Ortega\"}]}"
                                     )
                             }
                     )
             ), @ApiResponse(
                     responseCode = "404",
-                    description = "",
+                    description = "Referees not found",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = GeneralErrorResponse.class),
                             examples = {
                                     @ExampleObject(
-                                            name = "Unsuccessful Login",
+                                            name = "Referees not found",
                                             value = """
                                                     {
-                                                        "path": "/api/auth/login",
-                                                        "error": "Unauthorized",
-                                                        "message": "No autorizado o token inválido",
-                                                        "status": 401
+                                                        "path": "/api/refeeres",
+                                                        "error": "Not found",
+                                                        "message": "There are no referees registered in the system",
+                                                        "status": 404
                                                     }"""
                                     )
                             }
