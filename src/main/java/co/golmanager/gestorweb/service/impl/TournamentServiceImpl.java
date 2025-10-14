@@ -14,13 +14,11 @@ import co.golmanager.gestorweb.service.interfaces.TournamentService;
 import co.golmanager.gestorweb.service.interfaces.UserService;
 import co.golmanager.gestorweb.util.DateUtils;
 import co.golmanager.gestorweb.util.ValidationUtils;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
