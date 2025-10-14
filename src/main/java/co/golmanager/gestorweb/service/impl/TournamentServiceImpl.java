@@ -199,7 +199,7 @@ public class TournamentServiceImpl implements TournamentService {
         String logName = t.getName();
 
         tournamentRepository.delete(t);
-        LocalDateTime deleteTime = LocalDateTime.now();
+        OffsetDateTime deleteTime = OffsetDateTime.now();
         log.info("Tournament {}  with id {} deleted", logUser, logName);
 
         return TournamentDeleteResponse.builder()

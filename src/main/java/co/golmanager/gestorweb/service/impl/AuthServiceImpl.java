@@ -1,8 +1,10 @@
 package co.golmanager.gestorweb.service.impl;
 
+import co.golmanager.gestorweb.presentation.dto.admin.DeleteOrganizerRequest;
 import co.golmanager.gestorweb.presentation.dto.authentication.*;
 import co.golmanager.gestorweb.entity.User;
 import co.golmanager.gestorweb.enums.Role;
+import co.golmanager.gestorweb.presentation.dto.generalDto.GeneralDeleteResponse;
 import co.golmanager.gestorweb.repository.UserRepository;
 import co.golmanager.gestorweb.service.interfaces.AuthService;
 import co.golmanager.gestorweb.service.interfaces.UserService;
@@ -15,6 +17,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -91,6 +96,28 @@ public class AuthServiceImpl implements AuthService {
                 .status(200)
                 .token(jwtService.generateToken(user))
                 .build();
+    }
+
+    @Override
+    public GeneralDeleteResponse deleteUserResponse(DeleteOrganizerRequest request, String email) {
+        ValidationUtils.roleAuthorizationValidation(userService.getUserByEmail(email));
+        User user = userService.getUserByEmail(request.getEmail());
+        Long userId = user.getId();
+        String userEmail = user.getEmail();
+
+        deleteUser(userEmail);
+        OffsetDateTime deleteTime = OffsetDateTime.now();
+
+        return  GeneralDeleteResponse.builder()
+                .elementId(userId)
+                .elementName(userEmail)
+                .deletionElementDate(deleteTime)
+                .build();
+    }
+
+    private void deleteUser(String email) {
+        User user = userService.getUserByEmail(email);
+        userRepository.delete(user);
     }
 
     private void emailValidation(String email) {

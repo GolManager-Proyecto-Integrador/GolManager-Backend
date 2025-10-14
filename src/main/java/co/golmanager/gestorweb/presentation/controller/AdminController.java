@@ -1,11 +1,14 @@
 package co.golmanager.gestorweb.presentation.controller;
 
 import co.golmanager.gestorweb.presentation.dto.admin.AdminDashboardResponse;
+import co.golmanager.gestorweb.presentation.dto.admin.DeleteOrganizerRequest;
 import co.golmanager.gestorweb.presentation.dto.admin.OrganizersResponse;
 import co.golmanager.gestorweb.presentation.dto.authentication.RegisterRequest;
 import co.golmanager.gestorweb.presentation.dto.authentication.RegisterResponse;
 import co.golmanager.gestorweb.presentation.dto.authentication.UpdateRequest;
+import co.golmanager.gestorweb.presentation.dto.generalDto.GeneralDeleteResponse;
 import co.golmanager.gestorweb.presentation.dto.generalDto.GeneralErrorResponse;
+import co.golmanager.gestorweb.presentation.dto.referee.RefereeListResponse;
 import co.golmanager.gestorweb.service.interfaces.AdminDashboardService;
 import co.golmanager.gestorweb.service.interfaces.AuthService;
 import co.golmanager.gestorweb.service.interfaces.OrganizerService;
@@ -34,7 +37,25 @@ public class AdminController {
     private final AuthService authService;
 
     @GetMapping("/dashboard")
-    @Operation(summary = "Delivers the data to display on the administration dashboard.")
+    @Operation(
+            summary = "Display admin dashboard info.",
+            description = "Delivers the data to display on the administration dashboard",
+            responses = {@ApiResponse(
+                    responseCode = "200",
+                    description = "Data of display",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = AdminDashboardResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Referees list",
+                                            value = "[{\"id\":2,\"name\":\"organizador\",\"email\":\"organizador@torneos.com\",\"numTournaments\":8},{\"id\":3,\"name\":\"organizador4\",\"email\":\"organizador4@torneos.com\",\"numTournaments\":2}]"
+                                    )
+                            }
+                    )
+            )
+            })
+
     public ResponseEntity<AdminDashboardResponse> getDashboard(@Valid Authentication authentication) {
         return ResponseEntity.ok(adminDashboardService.getDashboardAdminInfoResponse(authentication.getName()));
     }
@@ -123,5 +144,10 @@ public class AdminController {
     @PutMapping("/organizers")
     public ResponseEntity<RegisterResponse> updateOrganizerAuth(@RequestBody @Valid UpdateRequest request, Authentication authentication) {
         return ResponseEntity.ok(authService.updateUserResponse(request, authentication.getName()));
+    }
+
+    @DeleteMapping("/organizers")
+    public ResponseEntity<GeneralDeleteResponse> deleteOrganizer(@RequestBody @Valid DeleteOrganizerRequest request, Authentication authentication) {
+        return ResponseEntity.ok(authService.deleteUserResponse(request, authentication.getName()));
     }
 }

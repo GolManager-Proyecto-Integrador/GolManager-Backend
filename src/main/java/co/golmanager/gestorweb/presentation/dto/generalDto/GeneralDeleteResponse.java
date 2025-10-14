@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 @Builder
@@ -14,5 +15,5 @@ import java.time.LocalDateTime;
 public class GeneralDeleteResponse {
     Long elementId;
     String elementName;
-    LocalDateTime deletionElementDate;
+    OffsetDateTime deletionElementDate;
 }
