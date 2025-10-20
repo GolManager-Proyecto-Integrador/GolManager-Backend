@@ -8,7 +8,6 @@ import co.golmanager.gestorweb.presentation.dto.authentication.RegisterResponse;
 import co.golmanager.gestorweb.presentation.dto.authentication.UpdateRequest;
 import co.golmanager.gestorweb.presentation.dto.generalDto.GeneralDeleteResponse;
 import co.golmanager.gestorweb.presentation.dto.generalDto.GeneralErrorResponse;
-import co.golmanager.gestorweb.presentation.dto.referee.RefereeListResponse;
 import co.golmanager.gestorweb.service.interfaces.AdminDashboardService;
 import co.golmanager.gestorweb.service.interfaces.AuthService;
 import co.golmanager.gestorweb.service.interfaces.OrganizerService;
