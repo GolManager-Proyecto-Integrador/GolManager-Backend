@@ -1,10 +1,6 @@
 package co.golmanager.gestorweb.service.impl;
 
-import co.golmanager.gestorweb.presentation.dto.tournament.CreateTournamentRequest;
-import co.golmanager.gestorweb.presentation.dto.tournament.CreateTournamentResponse;
-import co.golmanager.gestorweb.presentation.dto.tournament.TournamentDeleteResponse;
-import co.golmanager.gestorweb.presentation.dto.tournament.TournamentDetailResponse;
-import co.golmanager.gestorweb.presentation.dto.tournament.TournamentSummaryResponse;
+import co.golmanager.gestorweb.presentation.dto.tournament.*;
 import co.golmanager.gestorweb.entity.Referee;
 import co.golmanager.gestorweb.entity.Tournament;
 import co.golmanager.gestorweb.enums.TournamentFormat;
@@ -21,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;

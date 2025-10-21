@@ -5,6 +5,7 @@ import co.golmanager.gestorweb.presentation.dto.tournament.CreateTournamentRespo
 import co.golmanager.gestorweb.presentation.dto.tournament.TournamentDeleteResponse;
 import co.golmanager.gestorweb.presentation.dto.tournament.TournamentDetailResponse;
 import co.golmanager.gestorweb.presentation.dto.tournament.TournamentSummaryResponse;
+import co.golmanager.gestorweb.service.interfaces.TeamPositionService;
 import co.golmanager.gestorweb.service.interfaces.TournamentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,6 +26,7 @@ import java.util.List;
 class TournamentController {
 
     private final TournamentService tournamentService;
+    private final TeamPositionService teamPositionService;
 
     @Operation(summary = "Obtain all tournaments for the authenticated user", description = "Retrieves a list of all tournaments associated with the authenticated user.")
     @GetMapping
@@ -65,4 +67,14 @@ class TournamentController {
         String email = authentication.getName();
         return ResponseEntity.ok(tournamentService.deleteTournament(Id, email));
     }
+
+    //Specific Endpoints for tournament
+    @Operation(summary = "Get teams positions", description = "Get all team position for Tournament ID.")
+    @GetMapping({"/{idTorneo}/positions"})
+    public ResponseEntity<?> getPositionTableTournament(@PathVariable Long idTorneo, Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(teamPositionService.getPositionsTournament(idTorneo, email));
+    }
+
+
 }
