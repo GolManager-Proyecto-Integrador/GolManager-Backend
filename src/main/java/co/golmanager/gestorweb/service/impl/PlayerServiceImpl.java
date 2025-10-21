@@ -70,4 +70,15 @@ public class PlayerServiceImpl implements PlayerService {
                 .players(scorerPlayers)
                 .build();
     }
+
+    @Override
+    public YellowCardPlayersResponse getYellowCardPlayers(Long tournamentId, String email, int numberRegisters) {
+        log.info("Obtaint table of yellow cards for tournament: {}", tournamentId);
+        tournamentService.getTournamentById(email,tournamentId);
+        Pageable pageable = PageRequest.of(0, numberRegisters);
+        List<YellowCardPlayerDTO> yellowCardsPlayers = playerRepository.findYellowCardsPlayersByTournamentId(tournamentId, pageable);
+        return YellowCardPlayersResponse.builder()
+                .players(yellowCardsPlayers)
+                .build();
+    }
 }

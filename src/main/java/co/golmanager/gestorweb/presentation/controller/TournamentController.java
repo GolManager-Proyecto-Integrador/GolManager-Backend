@@ -83,4 +83,10 @@ class TournamentController {
         String email = authentication.getName();
         return ResponseEntity.ok(playerService.getScorerPlayers(idTorneo, email, numberRegisters));
     }
+
+    @GetMapping("/{idTorneo}/top-yellowcards")
+    public ResponseEntity<?> getTopYellowCardTableTournament(@PathVariable Long idTorneo, @RequestParam(defaultValue = "10") int numberRegisters, Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(playerService.getYellowCardPlayers(idTorneo, email, numberRegisters));
+    }
 }

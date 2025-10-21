@@ -4,6 +4,7 @@ import co.golmanager.gestorweb.entity.Player;
 import co.golmanager.gestorweb.enums.PlayerStatus;
 import co.golmanager.gestorweb.presentation.dto.player.ScorerPlayerDTO;
 import co.golmanager.gestorweb.presentation.dto.player.SuspendedPlayerDTO;
+import co.golmanager.gestorweb.presentation.dto.player.YellowCardPlayerDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -41,5 +42,17 @@ public interface    PlayerRepository extends JpaRepository<Player, Long> {
     """)
     List<ScorerPlayerDTO> findScorerPlayersByTournamentId(@Param("tournamentId") Long tournamentId, Pageable pageable);
 
+
+    @Query("""
+        SELECT new co.golmanager.gestorweb.presentation.dto.player.YellowCardPlayerDTO(
+                p.name,
+                p.team.name,
+                p.yellowCards
+        )
+        FROM Player p
+        WHERE  p.team.tournament.id = :tournamentId
+        ORDER BY p.yellowCards DESC, p.redCards DESC, p.age ASC
+    """)
+    List<YellowCardPlayerDTO> findYellowCardsPlayersByTournamentId(@Param("tournamentId") Long tournamentId, Pageable pageable);
 }
 
