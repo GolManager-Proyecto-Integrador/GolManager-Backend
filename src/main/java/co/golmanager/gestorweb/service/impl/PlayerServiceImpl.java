@@ -1,20 +1,19 @@
 package co.golmanager.gestorweb.service.impl;
 
-import co.golmanager.gestorweb.presentation.dto.player.CreatePlayerRequest;
+import co.golmanager.gestorweb.presentation.dto.player.*;
 import co.golmanager.gestorweb.entity.Player;
 import co.golmanager.gestorweb.entity.Team;
 import co.golmanager.gestorweb.enums.PlayerStatus;
-import co.golmanager.gestorweb.presentation.dto.player.SuspendedPlayerDTO;
-import co.golmanager.gestorweb.presentation.dto.player.SuspendedPlayersResponse;
 import co.golmanager.gestorweb.repository.PlayerRepository;
 import co.golmanager.gestorweb.service.interfaces.PlayerService;
 import co.golmanager.gestorweb.service.interfaces.TournamentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 
 import java.util.List;
 
@@ -58,6 +57,17 @@ public class PlayerServiceImpl implements PlayerService {
 
         return SuspendedPlayersResponse.builder()
                 .players(players)
+                .build();
+    }
+
+    @Override
+    public ScorerPlayersResponse getScorerPlayers(Long tournamentId, String email, int numberRegisters) {
+        log.info("Obtaint table of scorer for tournament: {}", tournamentId);
+        tournamentService.getTournamentById(email,tournamentId);
+        Pageable pageable = PageRequest.of(0, numberRegisters);
+        List<ScorerPlayerDTO> scorerPlayers = playerRepository.findScorerPlayersByTournamentId(tournamentId, pageable);
+        return ScorerPlayersResponse.builder()
+                .players(scorerPlayers)
                 .build();
     }
 }
