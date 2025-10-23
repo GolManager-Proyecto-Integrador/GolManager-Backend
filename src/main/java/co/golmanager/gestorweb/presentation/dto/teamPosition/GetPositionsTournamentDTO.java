@@ -18,5 +18,5 @@ public class GetPositionsTournamentDTO {
     private int gamesLost;
     private int goalsScored;
     private int goalsConceded;
-    private int goalsDifference;
+    private int goalDifference;
 }

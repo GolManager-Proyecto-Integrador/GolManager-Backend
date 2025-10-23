@@ -24,7 +24,7 @@ public class Player {
     private String name;
     private int age;
     @Enumerated(EnumType.STRING)
-    @Column(name = "player_position")   
+    @Column(name = "player_position")
     private PlayerPosition position;
     private boolean starter; // true si es titular, false si es suplente
     @Column(name = "shirt_number")
