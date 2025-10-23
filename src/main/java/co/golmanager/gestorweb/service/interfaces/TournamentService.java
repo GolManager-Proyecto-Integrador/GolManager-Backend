@@ -1,10 +1,6 @@
 package co.golmanager.gestorweb.service.interfaces;
 
-import co.golmanager.gestorweb.presentation.dto.tournament.CreateTournamentRequest;
-import co.golmanager.gestorweb.presentation.dto.tournament.CreateTournamentResponse;
-import co.golmanager.gestorweb.presentation.dto.tournament.TournamentDeleteResponse;
-import co.golmanager.gestorweb.presentation.dto.tournament.TournamentDetailResponse;
-import co.golmanager.gestorweb.presentation.dto.tournament.TournamentSummaryResponse;
+import co.golmanager.gestorweb.presentation.dto.tournament.*;
 import co.golmanager.gestorweb.entity.Tournament;
 import org.springframework.stereotype.Service;
 
@@ -24,4 +20,5 @@ public interface TournamentService {
             (Long tournamentId, CreateTournamentRequest request, String email);
 
     TournamentDeleteResponse deleteTournament(Long tournamentId, String email);
+
 }

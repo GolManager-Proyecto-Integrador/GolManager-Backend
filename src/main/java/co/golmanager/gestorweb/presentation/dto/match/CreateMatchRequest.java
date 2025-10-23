@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Data
 @Builder
@@ -17,5 +17,5 @@ public class CreateMatchRequest {
     private Long tournamentId;
     private String stadiumName;
     private Long referee;
-    private LocalDate matchDate;
+    private OffsetDateTime matchDate;
 }

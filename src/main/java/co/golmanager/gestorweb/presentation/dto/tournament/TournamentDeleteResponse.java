@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 @Builder
@@ -14,5 +15,5 @@ import java.time.LocalDateTime;
 public class TournamentDeleteResponse {
     private Long tournamentId;
     private String name;
-    private LocalDateTime deletionDate;
+    private OffsetDateTime deletionDate;
 }

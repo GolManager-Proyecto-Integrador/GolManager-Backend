@@ -12,12 +12,11 @@ import java.time.OffsetDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateMatchResponse {
-    private int matchId;
+public class GetLastPlayedMatchesDTO {
     private String homeTeam;
+    private int goalsHomeTeam;
     private String awayTeam;
-    private String stadiumName;
+    private int goalsAwayTeam;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ssZ")
-    private OffsetDateTime matchDate;
-
+    private OffsetDateTime matchDateTime;
 }

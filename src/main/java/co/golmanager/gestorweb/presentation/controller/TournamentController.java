@@ -5,6 +5,8 @@ import co.golmanager.gestorweb.presentation.dto.tournament.CreateTournamentRespo
 import co.golmanager.gestorweb.presentation.dto.tournament.TournamentDeleteResponse;
 import co.golmanager.gestorweb.presentation.dto.tournament.TournamentDetailResponse;
 import co.golmanager.gestorweb.presentation.dto.tournament.TournamentSummaryResponse;
+import co.golmanager.gestorweb.service.interfaces.PlayerService;
+import co.golmanager.gestorweb.service.interfaces.TeamPositionService;
 import co.golmanager.gestorweb.service.interfaces.TournamentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,6 +27,8 @@ import java.util.List;
 class TournamentController {
 
     private final TournamentService tournamentService;
+    private final TeamPositionService teamPositionService;
+    private final PlayerService playerService;
 
     @Operation(summary = "Obtain all tournaments for the authenticated user", description = "Retrieves a list of all tournaments associated with the authenticated user.")
     @GetMapping
@@ -64,5 +68,25 @@ class TournamentController {
             @PathVariable Long Id, Authentication authentication) {
         String email = authentication.getName();
         return ResponseEntity.ok(tournamentService.deleteTournament(Id, email));
+    }
+
+    //Specific Endpoints for tournament
+    @Operation(summary = "Get teams positions", description = "Get all team position for Tournament ID.")
+    @GetMapping({"/{idTorneo}/positions"})
+    public ResponseEntity<?> getPositionTableTournament(@PathVariable Long idTorneo, Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(teamPositionService.getPositionsTournament(idTorneo, email));
+    }
+
+    @GetMapping("/{idTorneo}/top-scorer")
+    public ResponseEntity<?> getTopScorersTableTournament(@PathVariable Long idTorneo, @RequestParam(defaultValue = "10") int numberRegisters, Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(playerService.getScorerPlayers(idTorneo, email, numberRegisters));
+    }
+
+    @GetMapping("/{idTorneo}/top-yellowcards")
+    public ResponseEntity<?> getTopYellowCardTableTournament(@PathVariable Long idTorneo, @RequestParam(defaultValue = "10") int numberRegisters, Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(playerService.getYellowCardPlayers(idTorneo, email, numberRegisters));
     }
 }

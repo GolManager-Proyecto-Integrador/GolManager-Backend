@@ -147,7 +147,7 @@ class TeamServiceImpl implements TeamService {
     public GeneralDeleteResponse deleteTeam(Long teamId, Long tournamentId, String email) {
         Team team = getTeamById(tournamentId, email, teamId);
         String teamName = team.getName();
-        LocalDateTime deleteDateTime = LocalDateTime.now();
+        OffsetDateTime deleteDateTime = OffsetDateTime.now();
         teamRepository.delete(team);
         log.info("Team {} with the id {} was removed", teamName, teamId);
 
