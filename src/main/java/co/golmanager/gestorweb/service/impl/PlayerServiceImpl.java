@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -87,5 +88,34 @@ public class PlayerServiceImpl implements PlayerService {
         log.info("Obtain players of team with id {} for tournament with id {}", idTeam, tournamentId);
         tournamentService.getTournamentById(email,tournamentId);
         return playerRepository.findPlayerByTournamentIdAndTeamId(tournamentId, idTeam);
+    }
+
+    @Override
+    public GetPlayerDTOResponse modifyPlayerInfo(Long tournamentId, PutPlayerRequest request, String email) {
+        tournamentService.getTournamentById(email,tournamentId);
+        Optional<Player> player = playerRepository.findById(request.getIdPlayer());
+        if (player.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player with id " + request.getIdPlayer() + " not found");
+        }
+
+        player.get().setName(request.getName());
+        player.get().setPosition(request.getPosition());
+        player.get().setStarter(request.isStarter());
+        player.get().setShirtNumber(request.getShirtNumber());
+        player.get().setStatus(request.getStatus());
+        playerRepository.save(player.get());
+        log.info("Modify info for player with id {} for tournament with id {}", request.getIdPlayer(), tournamentId);
+
+        return GetPlayerDTOResponse.builder()
+                .idPlayer(player.get().getId())
+                .name(player.get().getName())
+                .position(player.get().getPosition())
+                .starter(player.get().isStarter())
+                .shirtNumber(player.get().getShirtNumber())
+                .goals(player.get().getGoals())
+                .yellowCards(player.get().getYellowCards())
+                .redCards(player.get().getRedCards())
+                .status(player.get().getStatus())
+                .build();
     }
 }

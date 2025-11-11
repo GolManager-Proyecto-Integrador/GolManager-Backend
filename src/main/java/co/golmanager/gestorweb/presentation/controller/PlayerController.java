@@ -1,17 +1,16 @@
 package co.golmanager.gestorweb.presentation.controller;
 
 import co.golmanager.gestorweb.presentation.dto.player.GetPlayerDTOResponse;
+import co.golmanager.gestorweb.presentation.dto.player.PutPlayerRequest;
 import co.golmanager.gestorweb.service.interfaces.PlayerService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,5 +32,11 @@ public class PlayerController {
     public ResponseEntity <List<GetPlayerDTOResponse>> getPlayersByTournamentAndTeam(@PathVariable Long idTournament, @PathVariable Long idTeam ,Authentication authentication) {
         String email = authentication.getName();
         return ResponseEntity.ok(playerService.getPlayersByTournamentIdAndTeam(idTournament, idTeam, email));
+    }
+
+    @PutMapping("/{idTorneo}/teams/{idTeam}")
+    public ResponseEntity<GetPlayerDTOResponse> modifyPlayer(@PathVariable Long idTorneo, @PathVariable Long idTeam, @RequestBody @Valid PutPlayerRequest request, Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(playerService.modifyPlayerInfo(idTorneo, request, email));
     }
 }
