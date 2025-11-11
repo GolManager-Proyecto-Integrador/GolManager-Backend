@@ -81,4 +81,11 @@ public class PlayerServiceImpl implements PlayerService {
                 .players(yellowCardsPlayers)
                 .build();
     }
+
+    @Override
+    public List<GetPlayerDTOResponse> getPlayersByTournamentIdAndTeam(Long tournamentId, Long idTeam, String email) {
+        log.info("Obtain players of team with id {} for tournament with id {}", idTeam, tournamentId);
+        tournamentService.getTournamentById(email,tournamentId);
+        return playerRepository.findPlayerByTournamentIdAndTeamId(tournamentId, idTeam);
+    }
 }

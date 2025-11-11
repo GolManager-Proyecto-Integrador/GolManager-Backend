@@ -108,7 +108,7 @@ public class AuthController {
                             examples = {
                                     @ExampleObject(
                                             name = "Successful Login",
-                                            value = "{\"user\": \"organizador@torneos.com\",\"password\": \"organizador123\"}"
+                                            value = "{\"email\": \"organizador@torneos.com\",\"password\": \"organizador123\"}"
                                     )
                             }
                     )
