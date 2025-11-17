@@ -26,4 +26,6 @@ public class OrganizerServiceImpl implements OrganizerService {
         log.info("Getting organizers for email {}", email);
         return userRepository.findOrganizersWithTournamentCount(Role.USER);
     }
+
+
 }
