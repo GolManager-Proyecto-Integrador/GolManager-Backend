@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -42,5 +44,14 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
     """)
     List<GetLastPlayedMatchesDTO> findUpcomingMatchesByTournamentId(@Param("tournamentId") Long tournamentId, @Param("currentDate") OffsetDateTime currentDate, Pageable pageable);
 
+    //Número de Partidos en una semana por usuario
+
+    @Query("""
+           SELECT COUNT(m)
+           FROM Match m
+           WHERE m.tournament.user.id= :organizerId
+           AND m.matchDate BETWEEN :fromDate AND :toDate
+           """)
+    int countMatchInRange(@Param("organizerId") Long organizerId, @Param("fromDate") OffsetDateTime fromDate, @Param("toDate") OffsetDateTime toDate);
 
 }

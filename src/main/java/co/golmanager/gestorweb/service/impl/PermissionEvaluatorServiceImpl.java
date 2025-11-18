@@ -29,6 +29,8 @@ public class PermissionEvaluatorServiceImpl implements PermissionEvaluatorServic
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The User are not allowed to perform this action.");
         }
 
+        log.info("Can Access Tournament " + tournamentId);
+
     }
 
 

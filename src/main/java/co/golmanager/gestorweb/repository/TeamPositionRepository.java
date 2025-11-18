@@ -13,6 +13,7 @@ import java.util.List;
 public interface TeamPositionRepository extends JpaRepository<TeamPosition, Long> {
     @Query("""
         SELECT new co.golmanager.gestorweb.presentation.dto.teamPosition.GetPositionsTournamentDTO(
+            tp.team.id,
             tp.team.name,
             tp.points,
             tp.matchesPlayed,

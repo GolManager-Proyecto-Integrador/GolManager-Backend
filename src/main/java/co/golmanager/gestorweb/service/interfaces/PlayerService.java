@@ -15,5 +15,5 @@ public interface PlayerService {
     YellowCardPlayersResponse getYellowCardPlayers(Long tournamentId, String email,  int numberRegisters);
     List<GetPlayerDTOResponse> getPlayersByTournamentIdAndTeam(Long tournamentId, Long idTeam, String email);
     GetPlayerDTOResponse modifyPlayerInfo(Long tournamentId, PutPlayerRequest request, String email);
-
+    Player getPlayer(Long tournamentId, Long playerId);
 }

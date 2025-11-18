@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -117,5 +118,20 @@ public class PlayerServiceImpl implements PlayerService {
                 .redCards(player.get().getRedCards())
                 .status(player.get().getStatus())
                 .build();
+    }
+
+    @Override
+    public Player getPlayer(Long tournamentId, Long playerId) {
+
+        Optional<Player> p = playerRepository.findById(playerId);
+        if(p.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
+        }
+
+        if (!Objects.equals(p.get().getTeam().getTournament().getId(), tournamentId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Match with id: " + playerId + " does not belong to the tournament");
+        }
+
+        return p.get();
     }
 }

@@ -5,7 +5,6 @@ import co.golmanager.gestorweb.presentation.dto.match.CreateMatchRequest;
 import co.golmanager.gestorweb.presentation.dto.match.CreateMatchResponse;
 import co.golmanager.gestorweb.presentation.dto.match.GetLastPlayedMatchesResponse;
 import co.golmanager.gestorweb.presentation.dto.match.GetMatchResponse;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,4 +16,6 @@ public interface MatchService {
     GetLastPlayedMatchesResponse getLastPlayedMatches(Long tournamentId, int numberRegisters, String email);
     GetLastPlayedMatchesResponse getUpcomingMatches(Long tournamentId, int numberRegisters, String email);
     List<GetMatchResponse> generateLeagueMatches(Long tournamentId, String email);
+    GetMatchResponse getMatchById(Long matchId, Long tournamentId);
+    Match matchById(Long matchId, Long tournamentId);
 }

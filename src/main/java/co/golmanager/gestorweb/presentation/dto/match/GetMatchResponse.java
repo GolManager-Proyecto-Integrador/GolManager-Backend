@@ -16,6 +16,7 @@ import java.time.OffsetDateTime;
 public class GetMatchResponse {
     @NotNull
     private Long tournamentId;
+    private String tournamentName;
     @NotNull
     private Long matchId;
     private String homeTeam;
@@ -30,5 +31,6 @@ public class GetMatchResponse {
     private int goalsHomeTeam;
     private int goalsAwayTeam;
     private Long refereeId;
+    private String refereeName;
 
 }

@@ -6,11 +6,14 @@ import co.golmanager.gestorweb.entity.Tournament;
 import co.golmanager.gestorweb.presentation.dto.match.*;
 import co.golmanager.gestorweb.repository.MatchRepository;
 import co.golmanager.gestorweb.service.interfaces.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -18,6 +21,8 @@ import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -164,6 +169,53 @@ public class MatchServiceImpl implements MatchService {
         }
 
         return matches;
+    }
+
+    @Override
+    @Transactional
+    public GetMatchResponse getMatchById(Long matchId, Long tournamentId) {
+
+        Optional<Match> m = matchRepository.findById(matchId);
+        if (m.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Match id: " + matchId + " not found");
+        }
+        Match match = m.get();
+
+        if (!Objects.equals(match.getTournament().getId(), tournamentId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Match with id: " + matchId + " does not belong to the tournament");
+        }
+
+        return GetMatchResponse.builder()
+                .matchId((long) match.getId())
+                .tournamentId(match.getTournament().getId())
+                .tournamentName(match.getTournament().getName())
+                .homeTeamId(match.getHomeTeam().getId())
+                .homeTeam(match.getHomeTeam().getName())
+                .awayTeamId(match.getAwayTeam().getId())
+                .awayTeam(match.getAwayTeam().getName())
+                .matchDateTIme(match.getMatchDate())
+                .stadium(match.getStadium())
+                .goalsHomeTeam(match.getHomeGoals())
+                .goalsAwayTeam(match.getAwayGoals())
+                .refereeId(match.getReferee().getId())
+                .refereeName(match.getReferee().getName())
+                .build();
+    }
+
+    @Override
+    public Match matchById(Long matchId, Long tournamentId) {
+
+        Optional<Match> m = matchRepository.findById(matchId);
+
+        if(m.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Match not found");
+        }
+
+        if (!Objects.equals(m.get().getTournament().getId(), tournamentId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Match with id: " + matchId + " does not belong to the tournament");
+        }
+
+        return m.get();
     }
 
 

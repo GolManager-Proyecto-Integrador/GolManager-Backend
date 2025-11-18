@@ -12,8 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.PermissionEvaluator;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +51,12 @@ public class MatchController {
     public ResponseEntity<List<GetMatchResponse>> createMatchesLeague (@PathVariable Long tournamentId, Authentication authentication) {
         permissionEvaluatorService.canAccessTournament(tournamentId, authentication);
         return ResponseEntity.ok(matchService.generateLeagueMatches(tournamentId, authentication.getName()));
+    }
+
+    @GetMapping("{matchId}")
+    public ResponseEntity<GetMatchResponse> getMatchDetails (@PathVariable Long tournamentId, @PathVariable Long matchId, Authentication authentication) {
+        permissionEvaluatorService.canAccessTournament(tournamentId, authentication);
+        return ResponseEntity.ok(matchService.getMatchById(matchId, tournamentId));
     }
 
 }
