@@ -1,8 +1,7 @@
 package co.golmanager.gestorweb.presentation.controller;
 
 import co.golmanager.gestorweb.presentation.dto.generalDto.GeneralDeleteResponse;
-import co.golmanager.gestorweb.presentation.dto.matchEvents.GetGoalDetailsResponse;
-import co.golmanager.gestorweb.presentation.dto.matchEvents.PostGoalRequest;
+import co.golmanager.gestorweb.presentation.dto.matchEvents.*;
 import co.golmanager.gestorweb.service.interfaces.MatchEventService;
 import co.golmanager.gestorweb.service.interfaces.PermissionEvaluatorService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -24,9 +23,10 @@ public class MatchEventsController {
     private final MatchEventService matchEventService;
 
 
-    @GetMapping()
-    public ResponseEntity<?> obtainMatchEvents(@PathVariable("tournamentId") Long tournamentId) {
-        return null;
+    @GetMapping("/{matchId}")
+    public ResponseEntity<GetAllEventsForMatchResponse> obtainMatchEvents(@PathVariable("tournamentId") Long tournamentId, @PathVariable Long matchId, Authentication authentication) {
+        permissionEvaluatorService.canAccessTournament(tournamentId, authentication);
+        return ResponseEntity.ok(matchEventService.getAllEventsForMatch(tournamentId, matchId));
     }
 
     @GetMapping("/goal/{idGoal}")
@@ -70,5 +70,48 @@ public class MatchEventsController {
         permissionEvaluatorService.canAccessTournament(tournamentId, authentication);
         return ResponseEntity.ok(matchEventService.deleteGoal(tournamentId, idGoal));
     }
+
+    @GetMapping("/card/{idCard}")
+    public ResponseEntity<GetCardDetailsResponse> obtainDetailsOfCards(@PathVariable Long tournamentId, @PathVariable Long idCard, Authentication authentication) {
+
+        permissionEvaluatorService.canAccessTournament(tournamentId, authentication);
+        return ResponseEntity.ok(matchEventService.getCardDetails(matchEventService.getCard(tournamentId, idCard)));
+    }
+
+    @PostMapping("/card")
+    public ResponseEntity<GetCardDetailsResponse> recordCard(@PathVariable Long tournamentId, @Valid @RequestBody PostCardRequest postCardRequest, Authentication authentication) {
+
+        permissionEvaluatorService.canAccessTournament(tournamentId, authentication);
+        return ResponseEntity.ok(matchEventService.getCardDetails(
+                matchEventService.recordCard(
+                        tournamentId,
+                        postCardRequest.getMatchId(),
+                        postCardRequest.getPlayerId(),
+                        postCardRequest.getCardMinute(),
+                        postCardRequest.getCardColor()
+                )));
+    }
+
+    @PutMapping("/card/{idCard}")
+    public ResponseEntity<GetCardDetailsResponse> editCardDetails(@PathVariable Long tournamentId, @PathVariable Long idCard,@Valid @RequestBody PostCardRequest postCardRequest, Authentication authentication) {
+
+        permissionEvaluatorService.canAccessTournament(tournamentId, authentication);
+        return ResponseEntity.ok(matchEventService.getCardDetails(
+                matchEventService.editCard(
+                        tournamentId,
+                        postCardRequest.getMatchId(),
+                        postCardRequest.getPlayerId(),
+                        postCardRequest.getCardMinute(),
+                        postCardRequest.getCardColor(),
+                        idCard
+                )));
+    }
+
+    @DeleteMapping("/card/{idCard}")
+    public ResponseEntity<GeneralDeleteResponse> deleteCard(@PathVariable Long tournamentId, @PathVariable Long idCard, Authentication authentication) {
+        permissionEvaluatorService.canAccessTournament(tournamentId, authentication);
+        return ResponseEntity.ok(matchEventService.deleteCard(tournamentId, idCard));
+    }
+
 
 }
