@@ -112,7 +112,6 @@ public class MatchServiceImpl implements MatchService {
         int matchesPerRound = n / 2;
 
         List<GetMatchResponse> matches = new ArrayList<>();
-        List<Match> matchesBD = new ArrayList<>();
         List<Team> rotatedTeams = new ArrayList<>(teams);
 
         long totalDays = ChronoUnit.DAYS.between(startDate, endDate);
@@ -146,7 +145,7 @@ public class MatchServiceImpl implements MatchService {
 
                 matches.add(GetMatchResponse.builder()
                         .tournamentId(savedMatch.getTournament().getId())
-                        .matchId(Long.valueOf(savedMatch.getId())) // se asigna al guardar en BD
+                        .matchId(savedMatch.getId()) // se asigna al guardar en BD
                         .homeTeam(savedMatch.getHomeTeam().getName())
                         .homeTeamId(savedMatch.getHomeTeam().getId())
                         .awayTeam(savedMatch.getAwayTeam().getName())
@@ -186,7 +185,7 @@ public class MatchServiceImpl implements MatchService {
         }
 
         return GetMatchResponse.builder()
-                .matchId((long) match.getId())
+                .matchId(match.getId())
                 .tournamentId(match.getTournament().getId())
                 .tournamentName(match.getTournament().getName())
                 .homeTeamId(match.getHomeTeam().getId())

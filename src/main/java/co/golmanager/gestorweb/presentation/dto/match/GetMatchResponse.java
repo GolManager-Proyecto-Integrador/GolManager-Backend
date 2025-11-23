@@ -1,6 +1,7 @@
 package co.golmanager.gestorweb.presentation.dto.match;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,12 +19,11 @@ public class GetMatchResponse {
     private Long tournamentId;
     private String tournamentName;
     @NotNull
-    private Long matchId;
+    private int matchId;
     private String homeTeam;
     @NotNull
     private Long homeTeamId;
     private String awayTeam;
-    @NotNull
     private Long awayTeamId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ssZ")
     private OffsetDateTime matchDateTIme;
