@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetPositionsTournamentDTO {
+    private Long teamId;
     private String teamName;
     private int points;
     private int gamesPlayed;

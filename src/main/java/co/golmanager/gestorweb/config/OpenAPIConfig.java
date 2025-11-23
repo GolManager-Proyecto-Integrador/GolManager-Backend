@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(
                 title = "GolManager API",
-                version = "0.2-SNAPSHOT",
+                version = "1.0.0-SNAPSHOT",
                 description = "API for managing soccer tournaments, teams, players, and referees.",
                 contact = @Contact(
                         name = "Mateo Vargas Tirado - Luis Carlos Vanegas Zapata"

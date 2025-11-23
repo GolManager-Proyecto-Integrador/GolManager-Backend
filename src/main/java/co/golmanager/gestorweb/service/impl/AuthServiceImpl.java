@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Service
@@ -35,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public RegisterResponse register(RegisterRequest request, String requesterEmail) {
         ValidationUtils.roleAuthorizationValidation(userService.getUserByEmail(requesterEmail));
-        emailValidation(request.getEmail());
+        emailValidation(request.getEmail(), "");
         var user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
@@ -74,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User updateUser(UpdateRequest request, String email) {
         ValidationUtils.roleAuthorizationValidation(userService.getUserByEmail(email));
-        emailValidation(request.getNewEmail());
+        emailValidation(request.getNewEmail(), request.getActualEmail());
         User user = userService.getUserByEmail(request.getActualEmail());
 
         user.setName(request.getNewName());
@@ -120,9 +119,9 @@ public class AuthServiceImpl implements AuthService {
         userRepository.delete(user);
     }
 
-    private void emailValidation(String email) {
-        if (userRepository.findByEmail(email).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ("The email " + email + " is already registered") );
+    private void emailValidation(String newEmail, String oldEmail) {
+        if (userRepository.findByEmail(newEmail).isPresent() && !oldEmail.equals(newEmail)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ("The email " + newEmail + " is already registered") );
         }
     }
 

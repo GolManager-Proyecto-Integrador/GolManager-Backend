@@ -47,7 +47,7 @@ public class AdminController {
                             schema = @Schema(implementation = AdminDashboardResponse.class),
                             examples = {
                                     @ExampleObject(
-                                            name = "Referees list",
+                                            name = "Data display",
                                             value = "[{\"id\":2,\"name\":\"organizador\",\"email\":\"organizador@torneos.com\",\"numTournaments\":8},{\"id\":3,\"name\":\"organizador4\",\"email\":\"organizador4@torneos.com\",\"numTournaments\":2}]"
                                     )
                             }
@@ -61,7 +61,7 @@ public class AdminController {
 
     @GetMapping("/organizers")
     @Operation(summary = "Displays the organizers registered in the system with the number of associated tournaments.")
-    public ResponseEntity<List<OrganizersResponse>> getOrganizers(Authentication authentication) {
+        public ResponseEntity<List<OrganizersResponse>> getOrganizers(Authentication authentication) {
         String email = authentication.getName();
         List<OrganizersResponse> organizers = organizerService.getOrganizers(email);
         return ResponseEntity.ok(organizers);

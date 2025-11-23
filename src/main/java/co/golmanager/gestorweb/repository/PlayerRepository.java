@@ -2,6 +2,7 @@ package co.golmanager.gestorweb.repository;
 
 import co.golmanager.gestorweb.entity.Player;
 import co.golmanager.gestorweb.enums.PlayerStatus;
+import co.golmanager.gestorweb.presentation.dto.player.GetPlayerDTOResponse;
 import co.golmanager.gestorweb.presentation.dto.player.ScorerPlayerDTO;
 import co.golmanager.gestorweb.presentation.dto.player.SuspendedPlayerDTO;
 import co.golmanager.gestorweb.presentation.dto.player.YellowCardPlayerDTO;
@@ -54,5 +55,22 @@ public interface    PlayerRepository extends JpaRepository<Player, Long> {
         ORDER BY p.yellowCards DESC, p.redCards DESC, p.age ASC
     """)
     List<YellowCardPlayerDTO> findYellowCardsPlayersByTournamentId(@Param("tournamentId") Long tournamentId, Pageable pageable);
+
+    @Query("""
+        SELECT new co.golmanager.gestorweb.presentation.dto.player.GetPlayerDTOResponse(                p.id,
+                p.name,
+                p.position,
+                p.starter,
+                p.shirtNumber,
+                p.goals,
+                p.yellowCards,
+                p.redCards,
+                p.status
+        )
+        FROM Player p
+        WHERE p.team.tournament.id = :tournamentId AND p.team.id = :teamId
+        ORDER BY p.shirtNumber ASC
+    """)
+    List<GetPlayerDTOResponse> findPlayerByTournamentIdAndTeamId(@Param("tournamentId") Long tournamentId, @Param("teamId") Long teamId);
 }
 

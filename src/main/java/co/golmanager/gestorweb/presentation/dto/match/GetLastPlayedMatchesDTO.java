@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetLastPlayedMatchesDTO {
+    private int matchId;
     private String homeTeam;
     private int goalsHomeTeam;
     private String awayTeam;

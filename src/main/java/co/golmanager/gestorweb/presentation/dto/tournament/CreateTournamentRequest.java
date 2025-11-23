@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateTournamentRequest {
+public class    CreateTournamentRequest {
     @NotBlank
     private String name;
 

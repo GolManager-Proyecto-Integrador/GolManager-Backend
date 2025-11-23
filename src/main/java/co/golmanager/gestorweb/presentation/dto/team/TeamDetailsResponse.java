@@ -17,7 +17,7 @@ import java.time.OffsetDateTime;
 @Data
 @Builder
 @NoArgsConstructor
-public class TeamDetailsResponse {
+public class    TeamDetailsResponse {
     private Long teamId;
     private String name;
     private String coach;

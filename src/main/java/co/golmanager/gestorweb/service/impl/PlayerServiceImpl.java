@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -80,5 +82,56 @@ public class PlayerServiceImpl implements PlayerService {
         return YellowCardPlayersResponse.builder()
                 .players(yellowCardsPlayers)
                 .build();
+    }
+
+    @Override
+    public List<GetPlayerDTOResponse> getPlayersByTournamentIdAndTeam(Long tournamentId, Long idTeam, String email) {
+        log.info("Obtain players of team with id {} for tournament with id {}", idTeam, tournamentId);
+        tournamentService.getTournamentById(email,tournamentId);
+        return playerRepository.findPlayerByTournamentIdAndTeamId(tournamentId, idTeam);
+    }
+
+    @Override
+    public GetPlayerDTOResponse modifyPlayerInfo(Long tournamentId, PutPlayerRequest request, String email) {
+        tournamentService.getTournamentById(email,tournamentId);
+        Optional<Player> player = playerRepository.findById(request.getIdPlayer());
+        if (player.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player with id " + request.getIdPlayer() + " not found");
+        }
+
+        player.get().setName(request.getName());
+        player.get().setPosition(request.getPosition());
+        player.get().setStarter(request.isStarter());
+        player.get().setShirtNumber(request.getShirtNumber());
+        player.get().setStatus(request.getStatus());
+        playerRepository.save(player.get());
+        log.info("Modify info for player with id {} for tournament with id {}", request.getIdPlayer(), tournamentId);
+
+        return GetPlayerDTOResponse.builder()
+                .idPlayer(player.get().getId())
+                .name(player.get().getName())
+                .position(player.get().getPosition())
+                .starter(player.get().isStarter())
+                .shirtNumber(player.get().getShirtNumber())
+                .goals(player.get().getGoals())
+                .yellowCards(player.get().getYellowCards())
+                .redCards(player.get().getRedCards())
+                .status(player.get().getStatus())
+                .build();
+    }
+
+    @Override
+    public Player getPlayer(Long tournamentId, Long playerId) {
+
+        Optional<Player> p = playerRepository.findById(playerId);
+        if(p.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
+        }
+
+        if (!Objects.equals(p.get().getTeam().getTournament().getId(), tournamentId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Match with id: " + playerId + " does not belong to the tournament");
+        }
+
+        return p.get();
     }
 }
