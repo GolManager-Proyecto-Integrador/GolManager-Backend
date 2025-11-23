@@ -18,6 +18,7 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
 
     @Query("""
         SELECT new co.golmanager.gestorweb.presentation.dto.match.GetLastPlayedMatchesDTO(
+            m.id,
             m.homeTeam.name,
             m.homeGoals,
             m.awayTeam.name,
@@ -32,6 +33,7 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
 
     @Query("""
         SELECT new co.golmanager.gestorweb.presentation.dto.match.GetLastPlayedMatchesDTO(
+            m.id,
             m.homeTeam.name,
             m.homeGoals,
             m.awayTeam.name,
