@@ -10,7 +10,7 @@
     </parent>
     <groupId>co.golmanager</groupId>
     <artifactId>gestorweb</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>gestorweb</name>
     <description>Gestor web para competiciones de futbol 11. </description>
     <url/>
