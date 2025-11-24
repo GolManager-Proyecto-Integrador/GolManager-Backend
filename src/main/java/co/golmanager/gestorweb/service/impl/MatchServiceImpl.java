@@ -3,6 +3,7 @@ package co.golmanager.gestorweb.service.impl;
 import co.golmanager.gestorweb.entity.Match;
 import co.golmanager.gestorweb.entity.Team;
 import co.golmanager.gestorweb.entity.Tournament;
+import co.golmanager.gestorweb.presentation.dto.generalDto.GeneralDeleteResponse;
 import co.golmanager.gestorweb.presentation.dto.match.*;
 import co.golmanager.gestorweb.repository.MatchRepository;
 import co.golmanager.gestorweb.service.interfaces.*;
@@ -202,6 +203,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
+    @Transactional
     public Match matchById(Long matchId, Long tournamentId) {
 
         Optional<Match> m = matchRepository.findById(matchId);
@@ -217,5 +219,46 @@ public class MatchServiceImpl implements MatchService {
         return m.get();
     }
 
+    @Override
+    @Transactional
+    public GetMatchResponse editMatch(Long matchId, Long tournamentId, OffsetDateTime matchDate, String stadium, Long refereeId) {
+        Match m = matchById(matchId, tournamentId);
+        m.setMatchDate(matchDate);
+        m.setStadium(stadium);
+        m.setReferee(refereeService.getReferee(refereeId));
+        Match matchSaved = matchRepository.save(m);
+        log.info("Match with id: {} updated", matchSaved.getId());
 
+        return GetMatchResponse.builder()
+                .matchId(matchSaved.getId())
+                .tournamentId(matchSaved.getTournament().getId())
+                .tournamentName(matchSaved.getTournament().getName())
+                .homeTeamId(matchSaved.getHomeTeam().getId())
+                .homeTeam(matchSaved.getHomeTeam().getName())
+                .awayTeamId(matchSaved.getAwayTeam().getId())
+                .awayTeam(matchSaved.getAwayTeam().getName())
+                .matchDateTIme(matchSaved.getMatchDate())
+                .stadium(matchSaved.getStadium())
+                .goalsHomeTeam(matchSaved.getHomeGoals())
+                .goalsAwayTeam(matchSaved.getAwayGoals())
+                .refereeId(matchSaved.getReferee().getId())
+                .refereeName(matchSaved.getReferee().getName())
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public GeneralDeleteResponse deleteMatch(Long matchId, Long tournamentId) {
+        Match m = matchById(matchId, tournamentId);
+        int logMatchId = m.getId();
+        OffsetDateTime logDeleteMatchDate = OffsetDateTime.now();
+        matchRepository.delete(m);
+
+        log.info("Match with id: {} deleted", logMatchId);
+        return GeneralDeleteResponse.builder()
+                .elementId((long) logMatchId)
+                .elementName("Match")
+                .deletionElementDate(logDeleteMatchDate)
+                .build();
+    }
 }

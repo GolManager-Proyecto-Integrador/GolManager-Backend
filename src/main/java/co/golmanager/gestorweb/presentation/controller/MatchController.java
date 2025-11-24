@@ -1,9 +1,7 @@
 package co.golmanager.gestorweb.presentation.controller;
 
-import co.golmanager.gestorweb.presentation.dto.match.CreateMatchRequest;
-import co.golmanager.gestorweb.presentation.dto.match.CreateMatchResponse;
-import co.golmanager.gestorweb.presentation.dto.match.GetLastPlayedMatchesResponse;
-import co.golmanager.gestorweb.presentation.dto.match.GetMatchResponse;
+import co.golmanager.gestorweb.presentation.dto.generalDto.GeneralDeleteResponse;
+import co.golmanager.gestorweb.presentation.dto.match.*;
 import co.golmanager.gestorweb.service.interfaces.MatchService;
 import co.golmanager.gestorweb.service.interfaces.PermissionEvaluatorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +32,7 @@ public class MatchController {
         return ResponseEntity.ok(matchService.createMatchResponse(tournamentId, createMatchRequest, email));
     }
 
-    @GetMapping("/played")
+    @GetMapping ("/played")
     public ResponseEntity<GetLastPlayedMatchesResponse> getPlayedMatches(@PathVariable Long tournamentId, @RequestParam(defaultValue = "3") int numberRegisters, Authentication authentication) {
         String email = authentication.getName();
         return ResponseEntity.ok(matchService.getLastPlayedMatches(tournamentId, numberRegisters, email));
@@ -59,4 +57,16 @@ public class MatchController {
         return ResponseEntity.ok(matchService.getMatchById(matchId, tournamentId));
     }
 
+    @PutMapping
+    public ResponseEntity<GetMatchResponse> editMatch (@PathVariable Long tournamentId, @Valid @RequestBody EditMatchRequest request, Authentication authentication) {
+        permissionEvaluatorService.canAccessTournament(tournamentId, authentication);
+        return ResponseEntity.ok(matchService.editMatch(request.getMatchId(), tournamentId,
+                request.getMatchDate(), request.getStadium(), request.getRefereeId()));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<GeneralDeleteResponse> deleteMatch (@PathVariable Long tournamentId, @RequestParam Long matchId,Authentication authentication) {
+        permissionEvaluatorService.canAccessTournament(tournamentId, authentication);
+        return ResponseEntity.ok(matchService.deleteMatch(matchId, tournamentId));
+    }
 }
