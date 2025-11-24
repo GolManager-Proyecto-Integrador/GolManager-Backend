@@ -19,5 +19,6 @@ public class CreateMatchResponse {
     private String stadiumName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ssZ")
     private OffsetDateTime matchDate;
+    private Long tournamentId;
 
 }

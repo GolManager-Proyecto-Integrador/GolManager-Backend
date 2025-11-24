@@ -66,6 +66,7 @@ public class MatchServiceImpl implements MatchService {
                 .awayTeam(match.getAwayTeam().getName())
                 .matchDate(match.getMatchDate())
                 .stadiumName((match.getStadium()))
+                .tournamentId(match.getTournament().getId())
                 .build();
     }
 
