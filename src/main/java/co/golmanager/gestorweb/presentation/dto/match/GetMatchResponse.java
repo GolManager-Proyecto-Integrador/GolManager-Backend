@@ -26,7 +26,7 @@ public class GetMatchResponse {
     private String awayTeam;
     private Long awayTeamId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ssZ")
-    private OffsetDateTime matchDateTIme;
+    private OffsetDateTime matchDateTime;
     private String stadium;
     private int goalsHomeTeam;
     private int goalsAwayTeam;
