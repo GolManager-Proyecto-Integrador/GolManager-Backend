@@ -77,7 +77,8 @@ class TeamServiceImpl implements TeamService {
     public List<GetTeamsTournamentSummaryResponse> getTeamsTournamentResponse(Long tournamentId, String email) {
         List<Team> teams = getAllTeamsByTournament(tournamentId);
        return teams.stream().map(t -> GetTeamsTournamentSummaryResponse.builder()
-                        .teamName(t.getName())
+                       .idTeam(t.getId())
+                       .teamName(t.getName())
                         .coachName(t.getCoach())
                         .mainStadium(t.getMainStadium())
                         .teamCategory(t.getCategory())

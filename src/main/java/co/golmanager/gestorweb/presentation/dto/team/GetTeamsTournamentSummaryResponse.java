@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetTeamsTournamentSummaryResponse {
+    private Long idTeam;
     private String teamName;
     private String coachName;
     private String mainStadium;
